@@ -1,0 +1,281 @@
+- hosts: all
+  sudo: yes
+  tasks:
+  - name: Add Spotify apt repository key
+    apt_key: keyserver=keyserver.ubuntu.com id=D2C19886
+  - name: Add Spotify repository
+    apt_repository: repo='deb http://repository.spotify.com stable non-free'
+
+  - name: Add apt repositories
+    apt_repository: repo={{ item }}
+    with_items:
+      - 'ppa:nilarimogard/webupd8'
+      - 'ppa:remmina-ppa-team/remmina-next'
+      - 'ppa:tuxpoldo/btsync'
+      - 'ppa:zeal-developers/ppa'
+
+  - name: Update apt caches
+    apt: update_cache=yes
+
+  - name: Check Bash-It is installed
+    shell: sudo -u natx -i bash-it
+    register: result
+    ignore_errors: True
+  - name: Clone Bash-It into home
+    git: repo=http://github.com/Bash-it/bash-it.git dest=/home/natx/.bash_it
+    sudo_user: natx
+    when: result|failed
+  - name: Setup Bash-It
+    template: src=templates/bashrc.j2 dest=/home/natx/.bashrc
+    sudo_user: natx
+    when: result|failed
+  - name: Enable Bash-It aliases
+    shell: sudo -u natx -i bash-it enable alias {{ item }}
+    when: result|failed
+    with_items: 
+      - ansible
+      - bundler
+      - clipboard
+      - docker
+      - fuck
+      - general
+      - git
+      - heroku
+      - hg
+      - vagrant
+      - vim
+  - name: Enable Bash-It completions
+    shell: sudo -u natx -i bash-it enable completion {{ item }}
+    when: result|failed
+    with_items: 
+      - bash-it
+      - conda
+      - defaults
+      - dirs
+      - django
+      - fabric-completion
+      - gem
+      - git
+      - npm
+      - ssh
+      - test_kitchen
+      - vagrant
+      - virtualbox
+  - name: Enable Bash-It plugins
+    shell: sudo -u natx -i bash-it enable plugin {{ item }}
+    when: result|failed
+    with_items: 
+      - aws
+      - base
+      - battery
+      - browser
+      - dirs
+      - docker
+      - dirs
+      - docker
+      - extract
+      - gif
+      - git
+      - hg
+      - java
+      - javascript
+      - node
+      - nvm
+      - python
+      - ruby
+      - rvm
+      - ssh
+
+  - name: Check Telegram is installed
+    shell: sudo -u natx -i which telegram
+    register: result
+    ignore_errors: True
+  - name: Download Telegram package
+    get_url: url=https://tdesktop.com/linux dest=/tmp/telegram.tar.xz
+    when: result|failed
+  - name: Unpack Telegram
+    shell: tar -xJf /tmp/telegram.tar.xz chdir=/opt creates=/opt/Telegram
+  - name: Install Telegram
+    shell: ln -s /opt/Telegram/Telegram /usr/bin/telegram creates=/usr/bin/telegram
+  - name: Remove Telegram package
+    shell: rm /tmp/telegram.tar.xz removes=/tmp/telegram.tar.xz
+
+  - name: Check Chrome is installed
+    shell: sudo -u natx -i which google-chrome
+    register: result
+    ignore_errors: True
+  - name: Download Chrome package
+    get_url: url=https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb dest=/tmp/chrome.deb
+    when: result|failed
+  - name: Install Chrome
+    apt: deb=/tmp/chrome.deb
+    when: result|failed
+  - name: Remove Chrome package
+    shell: rm /tmp/chrome.deb removes=/tmp/chrome.deb
+
+  - name: Check Go is installed
+    shell: sudo -u natx -i which go
+    register: result
+    ignore_errors: True
+  - name: Download Go package
+    get_url: url=https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz dest=/tmp/go.tgz
+    when: result|failed
+  - name: Unpack Go
+    shell: tar -xzf /tmp/go.tgz chdir=/usr/local creates=/usr/local/go
+  - name: Install Go
+    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/usr/local/go/bin'
+  - name: Setup Go
+    lineinfile: dest=/home/natx/.bashrc line='export GOPATH=$HOME'
+  - name: Remove Go package
+    shell: rm /tmp/go.tgz removes=/tmp/go.tgz
+
+  - name: Check Hub is installed
+    shell: sudo -u natx -i which hub
+    register: result
+    ignore_errors: True
+  - name: Install Hub
+    shell: GOPATH=/home/natx /usr/local/go/bin/go get github.com/github/hub creates=/home/natx/bin/hub
+    sudo_user: natx
+    when: result|failed
+  - name: Setup Hub
+    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/home/natx/bin'
+  - name: Replace Git with Hub
+    lineinfile: dest=/home/natx/.bashrc line='alias git=hub'
+
+  - name: Check Heroku Toolbelt is installed
+    shell:  sudo -u natx -i which heroku
+    register: result
+    ignore_errors: True
+  - name: Download Heroku Toolbelt installer
+    get_url: url=https://toolbelt.heroku.com/install-ubuntu.sh dest=/tmp/heroku.sh
+    when: result|failed
+  - name: Install Heroku Toolbelt
+    shell: cat /tmp/heroku.sh | sh
+    when: result|failed
+  - name: Remove Heroku Toolbelt installer
+    shell: rm /tmp/heroku.sh removes=/tmp/heroku.sh
+
+  - name: Check Dropbox is installed
+    shell: sudo -u natx -i which dropbox
+    register: result
+    ignore_errors: True
+  - name: Install Dropbox
+    apt: name=nautilus-dropbox
+    when: result|failed
+  - name: Setup Dropbox
+    shell: XDG_CURRENT_DESKTOP=Unity dropbox start
+    when: result|failed
+
+  - name: Check Miniconda is installed
+    shell: sudo -u natx -i which conda
+    register: result
+    ignore_errors: True
+  - name: Download Miniconda installer
+    get_url: url=https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh dest=/tmp/Miniconda.sh
+    when: result|failed
+  - name: Install Miniconda
+    shell: sudo -u natx -i bash /tmp/Miniconda.sh -b -p /home/natx/.miniconda
+    when: result|failed
+  - name: Setup Conda
+    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/home/natx/.miniconda/bin'
+    when: result|failed
+  - name: Remove Miniconda installer
+    shell: rm /tmp/Miniconda.sh removes=/tmp/Miniconda.sh
+
+  - name: Check RVM is installed
+    shell: sudo -u natx -i rvm
+    register: result
+    ignore_errors: True
+  - name: Setup RVM keyserver
+    shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    sudo_user: natx
+    when: result|failed
+  - name: Download RVM installer
+    get_url: url=https://get.rvm.io dest=/tmp/rvm.sh
+    when: result|failed
+  - name: Install RVM
+    shell: sudo bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
+    sudo_user: natx
+    when: result|failed
+  - name: Setup PATH for RVM
+    lineinfile: dest=/home/natx/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
+
+  - name: Install thefuck requirements
+    apt: name=python-dev
+
+  - name: Install LibreOffice
+    apt: name={{ item }}
+    with_items:
+      - fonts-opensymbol
+      - hyphen-ca
+      - hyphen-en-us
+      - libreoffice
+      - myspell-ca
+      - myspell-en-us
+      - myspell-es
+      - mythes-ca
+      - mythes-en-us
+
+  - name: Check Powerline font is required
+    shell: ls /home/natx/.fonts/PowerlineSymbols.otf
+    register: font_installed
+    ignore_errors: True
+  - name: Make font dir
+    shell: sudo -u natx -i mkdir -p /home/natx/.fonts
+    when: font_installed|failed
+  - name: Download Powerline font
+    get_url: url=https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf dest=/home/natx/.fonts
+    when: font_installed|failed
+  - name: Make fontconfig dir
+    shell: sudo -u natx -i mkdir -p /home/natx/.config/fontconfig/conf.d
+    when: font_installed|failed
+  - name: Download Powerline fontconfig file
+    get_url: url=https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf dest=/home/natx/.config/fontconfig/conf.d
+    when: font_installed|failed
+  - name: Update font cache
+    shell:  sudo -u natx -i fc-cache -vf /home/natx/.fonts
+    when: font_installed|failed
+
+  - name: Install pip packages
+    pip: name={{ item }}
+    with_items:
+      - psutil
+      - thefuck
+
+  - name: Install apt packages
+    apt: name={{ item }}
+    with_items:
+      - btsync
+      - caffeine-plus
+      - calibre
+      - firefox
+      - gimp
+      - gimp-data-extras
+      - gimp-dcraw
+      - gimp-gap
+      - gimp-gluas
+      - gimp-gmic
+      - gimp-gutenprint
+      - gimp-lensfun
+      - gimp-plugin-registry
+      - gimp-texturize
+      - htop
+      - icedtea-7-plugin
+      - ipcalc
+      - keepassx
+      - openjdk-7-jre
+      - pidgin
+      - pidgin-guifications
+      - pidgin-hotkeys
+      - pidgin-lastfm
+      - pidgin-themes
+      - pidgin-twitter
+      - python-argcomplete
+      - remmina
+      - remmina-plugin-rdp
+      - remmina-plugin-vnc
+      - spotify-client
+      - terminator
+      - unetbootin
+      - vlc
+      - zeal
