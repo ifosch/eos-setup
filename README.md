@@ -47,7 +47,7 @@ With this playbook I setup the following in my elementary OS installation:
         sudo apt-get install git-core python-pip python-pycurl
         sudo pip install ansible
         mkdir -p src/github.com/ifosch
-        git clone git@github.com:ifosch/eos-setup !$
+        git clone https://github.com/ifosch/eos-setup.git !$
         sudo -s
         echo localhost ansible_connection=local >> /etc/ansible/hosts
         exit
