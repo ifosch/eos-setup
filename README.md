@@ -46,10 +46,12 @@ With this playbook I setup the following in my elementary OS installation:
         sudo apt-get update && sudo apt-get -y upgrade
         sudo apt-get install git-core python-pip python-pycurl
         sudo pip install ansible
-        mkdir -p src/github.com/ifosch
-        git clone https://github.com/ifosch/eos-setup.git !$/eos-setup
-        sudo -s
-        echo localhost ansible_connection=local >> /etc/ansible/hosts
+        mkdir -p src/github.com/ifosch/eos-setup
+        git clone https://github.com/ifosch/eos-setup.git !$
+        sudo mkdir -p /etc/ansible
+        sudo bash -c '
+          echo localhost ansible_connection=local >> /etc/ansible/hosts
+        '
         exit
 
 ## To make it work:
