@@ -12,6 +12,7 @@
 # Find a way to install:
 
   - Slack
+  - Touchpad Gestures
 
 # Find a replacement for:
 
