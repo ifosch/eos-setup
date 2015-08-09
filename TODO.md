@@ -1,22 +1,18 @@
 # Add to setup.yml when machine is big enough:
 
-  - Docker
-  - VirtualBox
-  - Vagrant
-  - PgAdmin3
-  - Kid3
-  - Levelator
-  - Audacity
-  - Steam
+  - [Docker Machine|https://docs.docker.com/machine/install-machine]
+  - [VirtualBox|https://www.virtualbox.org/wiki/Downloads]
+  - [Vagrant|https://www.vagrantup.com/downloads.html]
+  - [PgAdmin3|http://wiki.postgresql.org/wiki/Apt]
+  - [Kid3|http://kid3.sourceforge.net/#download]
+  - [Levelator|http://cdn.conversationsnetwork.org/Levelator-1.3.0-Python2.5.tar.bz2]
+  - [Audacity|http://ubuntuhandbook.org/index.php/2015/04/install-audacity-audio-editor-2-1-0-in-ubuntu-from-ppa/]
+  - [Slack|https://github.com/raelgc/scudcloud]
+  - [Steam|https://steamcdn-a.akamaihd.net/client/installer/steam.deb]
 
 # Find a way to install:
 
-  - Slack
   - Touchpad Gestures
-
-# Find a replacement for:
-
-  - OmniGraffle
 
 # Find configuration tweaks for:
 
