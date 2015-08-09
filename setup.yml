@@ -166,12 +166,11 @@
     shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
     sudo_user: natx
     when: result|failed
-  - name: Setup Dropbox autostart
-    template: src=templates/dropbox-autostart.j2 dest=/home/natx/.config/autostart/dropbox.desktop
-    sudo_user: natx
+  - name: Rename Dropbox client
+    shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
     when: result|failed
-  - name: Setup Dropbox autostart (for future users)
-    template: src=templates/dropbox-autostart.j2 dest=/usr/share/app-install/desktop/nautilus-dropbox:dropbox.desktop
+  - name: Put Dropbox client wrapper
+    template: src=templates/dropbox.j2 dest=/usr/bin/dropbox mode=0755
     when: result|failed
 
   - name: Check Miniconda is installed
