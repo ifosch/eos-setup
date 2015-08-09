@@ -163,7 +163,15 @@
     apt: name=nautilus-dropbox
     when: result|failed
   - name: Setup Dropbox
-    shell: XDG_CURRENT_DESKTOP=Unity dropbox start
+    shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
+    sudo_user: natx
+    when: result|failed
+  - name: Setup Dropbox autostart
+    template: src=templates/dropbox-autostart.j2 dest=/home/natx/.config/autostart/dropbox.desktop
+    sudo_user: natx
+    when: result|failed
+  - name: Setup Dropbox autostart (for future users)
+    template: src=templates/dropbox-autostart.j2 dest=/usr/share/app-install/desktop/nautilus-dropbox:dropbox.desktop
     when: result|failed
 
   - name: Check Miniconda is installed
