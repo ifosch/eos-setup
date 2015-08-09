@@ -266,6 +266,7 @@
       - gimp-lensfun
       - gimp-plugin-registry
       - gimp-texturize
+      - gnome-disk-utility
       - htop
       - icedtea-7-plugin
       - ipcalc
