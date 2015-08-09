@@ -44,10 +44,12 @@ With this playbook I setup the following in my elementary OS installation:
   - Run:
 
         sudo apt-get update && sudo apt-get -y upgrade
-        sudo apt-get install git-core python-pip python-pycurl
-        sudo pip install ansible
+        sudo apt-get -y install git-core python-pip \\
+          libcurl4-openssl-dev python-dev
+        sudo pip install ansible pycurl pyYAML
         mkdir -p src/github.com/ifosch/eos-setup
-        git clone https://github.com/ifosch/eos-setup.git !$
+        git clone https://github.com/ifosch/eos-setup.git \
+          src/github.com/ifosch/eos-setup
         sudo mkdir -p /etc/ansible
         sudo bash -c '
           echo localhost ansible_connection=local >> /etc/ansible/hosts
