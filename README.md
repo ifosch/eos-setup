@@ -1,4 +1,4 @@
-# Elementary OS setup
+# Debian - Elementary OS setup
 
 ## Introduction
 
@@ -9,7 +9,7 @@ It was nice enough, simple, and, even most important to me, supposed very light 
 Anyway, deep inside, a part of me was willing to go back to Linux, a little bit.
 That's why when I found easier to install Linux in a MacBook, I decided to prepare an automated setup for my local environment.
 
-With this playbook I setup the following in my elementary OS installation:
+With this playbook I setup the following in my setup:
 
   - BTSync
   - Caffeine Plus
@@ -40,7 +40,13 @@ With this playbook I setup the following in my elementary OS installation:
 
 ## Requirements:
 
-  - Fresh EOS Freya setup
+  - Fresh Debian Stretch or EOS Freya setup
+  - When using Debian Stretch, `sudo` needs to be installed and setup:
+
+        sudo -s
+        apt-get install sudo gksu
+        adduser <your_username> sudo
+
   - Run:
 
         sudo apt-get update && sudo apt-get -y upgrade

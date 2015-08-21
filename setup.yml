@@ -1,14 +1,24 @@
 - hosts: all
   sudo: yes
   tasks:
-  - name: Add Spotify apt repository key
-    apt_key: keyserver=keyserver.ubuntu.com id=D2C19886
-  - name: Add Spotify repository
-    apt_repository: repo='deb http://repository.spotify.com stable non-free'
+  - name: Add apt repositories keys
+    apt_key: keyserver={{ item.server }} id={{ item.id }}
+    with_items:
+      - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
+      - { server: 'keys.gnupg.net', id: '6BF18B15' }
 
   - name: Add apt repositories
-    apt_repository: repo={{ item }}
+    apt_repository: repo='{{ item }}'
+    when: ansible_distribution == 'Debian'
     with_items:
+      - 'deb http://repository.spotify.com stable non-free'
+      - 'deb http://debian.yeasoft.net/btsync testing main'
+
+  - name: Add apt repositories
+    apt_repository: repo='{{ item }}'
+    when: ansible_distribution != 'Debian'
+    with_items:
+      - 'deb http://repository.spotify.com stable non-free'
       - 'ppa:nilarimogard/webupd8'
       - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:tuxpoldo/btsync'
@@ -195,14 +205,15 @@
     ignore_errors: True
   - name: Setup RVM keyserver
     shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-    sudo_user: natx
     when: result|failed
   - name: Download RVM installer
     get_url: url=https://get.rvm.io dest=/tmp/rvm.sh
     when: result|failed
+  - name: Install cURL
+    apt: name=curl
+    when: ansible_distribution == 'Debian'
   - name: Install RVM
     shell: sudo bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
-    sudo_user: natx
     when: result|failed
   - name: Setup PATH for RVM
     lineinfile: dest=/home/natx/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
@@ -251,11 +262,17 @@
 
   - name: Install apt packages
     apt: name={{ item }}
+    when: ansible_distribution != 'Debian'
+    with_items:
+      - caffeine-plus
+      - firefox
+      - unetbootin
+
+  - name: Install apt packages
+    apt: name={{ item }}
     with_items:
       - btsync
-      - caffeine-plus
       - calibre
-      - firefox
       - gimp
       - gimp-data-extras
       - gimp-dcraw
@@ -284,6 +301,5 @@
       - remmina-plugin-vnc
       - spotify-client
       - terminator
-      - unetbootin
       - vlc
       - zeal
