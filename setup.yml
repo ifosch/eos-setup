@@ -12,6 +12,7 @@
     apt_repository: repo='{{ item }}'
     when: ansible_distribution == 'Debian'
     with_items:
+      - 'deb http://http.debian.net/debian jessie main contrib non-free'
       - 'deb http://repository.spotify.com stable non-free'
       - 'deb http://debian.yeasoft.net/btsync testing main'
       - 'deb http://linux.dropbox.com/debian jessie main'
@@ -28,6 +29,14 @@
 
   - name: Update apt caches
     apt: update_cache=yes
+
+  - name: Detect PCI devices
+    shell: lspci
+    register: lspci
+
+  - name: Install BCM43224 firmware
+    apt: name=firmware-brcm80211
+    when: ansible_distribution == 'Debian' and lspci.stdout.find('BCM43224')
 
   - name: Check Bash-It is installed
     shell: sudo -u natx -i bash-it
