@@ -6,6 +6,7 @@
     with_items:
       - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
       - { server: 'keys.gnupg.net', id: '6BF18B15' }
+      - { server: 'pgp.mit.edu', id: '5044912E' }
 
   - name: Add apt repositories
     apt_repository: repo='{{ item }}'
@@ -13,6 +14,7 @@
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
       - 'deb http://debian.yeasoft.net/btsync testing main'
+      - 'deb http://linux.dropbox.com/debian jessie main'
 
   - name: Add apt repositories
     apt_repository: repo='{{ item }}'
@@ -171,17 +173,20 @@
     ignore_errors: True
   - name: Install Dropbox
     apt: name=nautilus-dropbox
-    when: result|failed
+    when: result|failed and ansible_distribution != 'Debian'
+  - name: Install Dropbox
+    apt: name=dropbox
+    when: result|failed and ansible_distribution == 'Debian'
   - name: Setup Dropbox
     shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
     sudo_user: natx
-    when: result|failed
+    when: result|failed and ansible_distribution != 'Debian'
   - name: Rename Dropbox client
     shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
-    when: result|failed
+    when: result|failed and ansible_distribution != 'Debian'
   - name: Put Dropbox client wrapper
     template: src=templates/dropbox.j2 dest=/usr/bin/dropbox mode=0755
-    when: result|failed
+    when: result|failed and ansible_distribution != 'Debian'
 
   - name: Check Miniconda is installed
     shell: sudo -u natx -i which conda
