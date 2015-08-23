@@ -118,6 +118,12 @@
     shell: tar -xJf /tmp/telegram.tar.xz chdir=/opt creates=/opt/Telegram
   - name: Install Telegram
     shell: ln -s /opt/Telegram/Telegram /usr/bin/telegram creates=/usr/bin/telegram
+  - name: Setup Telegram Desktop icon
+    copy: src=files/telegram.png dest=/usr/share/icons/hicolor/128x128/apps/telegram.png
+    when: result|failed
+  - name: Setup Telegram Desktop info
+    template: src=templates/telegram.desktop.j2 dest=/usr/share/applications/telegram.desktop
+    when: result|failed
   - name: Remove Telegram package
     shell: rm /tmp/telegram.tar.xz removes=/tmp/telegram.tar.xz
 
