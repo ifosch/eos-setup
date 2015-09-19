@@ -39,21 +39,21 @@
     when: ansible_distribution == 'Debian' and lspci.stdout.find('BCM43224')
 
   - name: Check Bash-It is installed
-    shell: sudo -u natx -i bash-it
+    shell: sudo -u {{ user }} -i bash-it
     register: result
     ignore_errors: True
   - name: Clone Bash-It into home
-    git: repo=http://github.com/Bash-it/bash-it.git dest=/home/natx/.bash_it
-    sudo_user: natx
+    git: repo=http://github.com/Bash-it/bash-it.git dest=/home/{{ user }}/.bash_it
+    sudo_user: '{{ user }}'
     when: result|failed
   - name: Setup Bash-It
-    template: src=templates/bashrc.j2 dest=/home/natx/.bashrc
-    sudo_user: natx
+    template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc
+    sudo_user: '{{ user }}'
     when: result|failed
   - name: Enable Bash-It aliases
-    shell: sudo -u natx -i bash-it enable alias {{ item }}
+    shell: sudo -u {{ user }} -i bash-it enable alias {{ item }}
     when: result|failed
-    with_items: 
+    with_items:
       - ansible
       - bundler
       - clipboard
@@ -66,9 +66,9 @@
       - vagrant
       - vim
   - name: Enable Bash-It completions
-    shell: sudo -u natx -i bash-it enable completion {{ item }}
+    shell: sudo -u {{ user }} -i bash-it enable completion {{ item }}
     when: result|failed
-    with_items: 
+    with_items:
       - bash-it
       - conda
       - defaults
@@ -83,9 +83,9 @@
       - vagrant
       - virtualbox
   - name: Enable Bash-It plugins
-    shell: sudo -u natx -i bash-it enable plugin {{ item }}
+    shell: sudo -u {{ user }} -i bash-it enable plugin {{ item }}
     when: result|failed
-    with_items: 
+    with_items:
       - aws
       - base
       - battery
@@ -108,7 +108,7 @@
       - ssh
 
   - name: Check Telegram is installed
-    shell: sudo -u natx -i which telegram
+    shell: sudo -u {{ user }} -i which telegram
     register: result
     ignore_errors: True
   - name: Download Telegram package
@@ -128,7 +128,7 @@
     shell: rm /tmp/telegram.tar.xz removes=/tmp/telegram.tar.xz
 
   - name: Check Chrome is installed
-    shell: sudo -u natx -i which google-chrome
+    shell: sudo -u {{ user }} -i which google-chrome
     register: result
     ignore_errors: True
   - name: Download Chrome package
@@ -141,7 +141,7 @@
     shell: rm /tmp/chrome.deb removes=/tmp/chrome.deb
 
   - name: Check Go is installed
-    shell: sudo -u natx -i which go
+    shell: sudo -u {{ user }} -i which go
     register: result
     ignore_errors: True
   - name: Download Go package
@@ -150,27 +150,27 @@
   - name: Unpack Go
     shell: tar -xzf /tmp/go.tgz chdir=/usr/local creates=/usr/local/go
   - name: Install Go
-    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/usr/local/go/bin'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/usr/local/go/bin'
   - name: Setup Go
-    lineinfile: dest=/home/natx/.bashrc line='export GOPATH=$HOME'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='export GOPATH=$HOME'
   - name: Remove Go package
     shell: rm /tmp/go.tgz removes=/tmp/go.tgz
 
   - name: Check Hub is installed
-    shell: sudo -u natx -i which hub
+    shell: sudo -u {{ user }} -i which hub
     register: result
     ignore_errors: True
   - name: Install Hub
-    shell: GOPATH=/home/natx /usr/local/go/bin/go get github.com/github/hub creates=/home/natx/bin/hub
-    sudo_user: natx
+    shell: GOPATH=/home/{{ user }} /usr/local/go/bin/go get github.com/github/hub creates=/home/{{ user }}/bin/hub
+    sudo_user: '{{ user }}'
     when: result|failed
   - name: Setup Hub
-    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/home/natx/bin'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/bin'
   - name: Replace Git with Hub
-    lineinfile: dest=/home/natx/.bashrc line='alias git=hub'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='alias git=hub'
 
   - name: Check Heroku Toolbelt is installed
-    shell:  sudo -u natx -i which heroku
+    shell:  sudo -u {{ user }} -i which heroku
     register: result
     ignore_errors: True
   - name: Download Heroku Toolbelt installer
@@ -183,7 +183,7 @@
     shell: rm /tmp/heroku.sh removes=/tmp/heroku.sh
 
   - name: Check Dropbox is installed
-    shell: sudo -u natx -i which dropbox
+    shell: sudo -u {{ user }} -i which dropbox
     register: result
     ignore_errors: True
   - name: Install Dropbox
@@ -194,7 +194,7 @@
     when: result|failed and ansible_distribution == 'Debian'
   - name: Setup Dropbox
     shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
-    sudo_user: natx
+    sudo_user: '{{ user }}'
     when: result|failed and ansible_distribution != 'Debian'
   - name: Rename Dropbox client
     shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
@@ -204,23 +204,23 @@
     when: result|failed and ansible_distribution != 'Debian'
 
   - name: Check Miniconda is installed
-    shell: sudo -u natx -i which conda
+    shell: sudo -u {{ user }} -i which conda
     register: result
     ignore_errors: True
   - name: Download Miniconda installer
     get_url: url=https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh dest=/tmp/Miniconda.sh
     when: result|failed
   - name: Install Miniconda
-    shell: sudo -u natx -i bash /tmp/Miniconda.sh -b -p /home/natx/.miniconda
+    shell: sudo -u {{ user }} -i bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda
     when: result|failed
   - name: Setup Conda
-    lineinfile: dest=/home/natx/.bashrc line='export PATH=$PATH:/home/natx/.miniconda/bin'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/.miniconda/bin'
     when: result|failed
   - name: Remove Miniconda installer
     shell: rm /tmp/Miniconda.sh removes=/tmp/Miniconda.sh
 
   - name: Check RVM is installed
-    shell: sudo -u natx -i rvm
+    shell: sudo -u {{ user }} -i rvm
     register: result
     ignore_errors: True
   - name: Setup RVM keyserver
@@ -236,7 +236,7 @@
     shell: sudo bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
     when: result|failed
   - name: Setup PATH for RVM
-    lineinfile: dest=/home/natx/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
+    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
 
   - name: Install thefuck requirements
     apt: name=python-dev
@@ -255,23 +255,23 @@
       - mythes-en-us
 
   - name: Check Powerline font is required
-    shell: ls /home/natx/.fonts/PowerlineSymbols.otf
+    shell: ls /home/{{ user }}/.fonts/PowerlineSymbols.otf
     register: font_installed
     ignore_errors: True
   - name: Make font dir
-    shell: sudo -u natx -i mkdir -p /home/natx/.fonts
+    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.fonts
     when: font_installed|failed
   - name: Download Powerline font
-    get_url: url=https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf dest=/home/natx/.fonts
+    get_url: url=https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf dest=/home/{{ user }}/.fonts
     when: font_installed|failed
   - name: Make fontconfig dir
-    shell: sudo -u natx -i mkdir -p /home/natx/.config/fontconfig/conf.d
+    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.config/fontconfig/conf.d
     when: font_installed|failed
   - name: Download Powerline fontconfig file
-    get_url: url=https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf dest=/home/natx/.config/fontconfig/conf.d
+    get_url: url=https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf dest=/home/{{ user }}/.config/fontconfig/conf.d
     when: font_installed|failed
   - name: Update font cache
-    shell:  sudo -u natx -i fc-cache -vf /home/natx/.fonts
+    shell:  sudo -u {{ user }} -i fc-cache -vf /home/{{ user }}/.fonts
     when: font_installed|failed
 
   - name: Install pip packages

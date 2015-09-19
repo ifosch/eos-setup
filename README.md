@@ -66,4 +66,4 @@ With this playbook I setup the following in my setup:
 ## To make it work:
 
     cd src/github.com/ifosch/eos-setup
-    sudo ansible-playbook setup.yml
+    sudo ansible-playbook setup.yml --extra-vars "user=${USER}"
