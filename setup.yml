@@ -254,6 +254,20 @@
       - mythes-ca
       - mythes-en-us
 
+  - name: Install Caffeine Plus
+    apt: name=caffeine-plus
+    when: ansible_distribution != 'Debian'
+  - name: Prepare for Caffeine Gnome Ext. install
+    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.local/share/gnome-shell/extensions/caffeine@patapon.info
+    when: ansible_distribution == 'Debian'
+  - name: Get Caffeine Gnome Ext.
+    get_url: url=https://extensions.gnome.org/download-extension/caffeine@patapon.info.shell-extension.zip?version_tag=4792 dest=/tmp/caffeine.zip
+    when: ansible_distribution == 'Debian'
+  - name: Install Caffeine Gnome Ext.
+    unarchive: src=/tmp/caffeine.zip dest=/home/{{ user }}/.local/share/gnome-shell/extensions/caffeine@patapon.info
+    sudo_user: vagrant
+    when: ansible_distribution == 'Debian'
+
   - name: Check Powerline font is required
     shell: ls /home/{{ user }}/.fonts/PowerlineSymbols.otf
     register: font_installed
@@ -284,7 +298,6 @@
     apt: name={{ item }}
     when: ansible_distribution != 'Debian'
     with_items:
-      - caffeine-plus
       - firefox
       - unetbootin
 
