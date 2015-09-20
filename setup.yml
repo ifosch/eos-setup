@@ -7,6 +7,7 @@
       - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
       - { server: 'keys.gnupg.net', id: '6BF18B15' }
       - { server: 'pgp.mit.edu', id: '5044912E' }
+      - { server: 'keyserver.ubuntu.com', id: '8231B6DD' }
 
   - name: Add apt repositories
     apt_repository: repo='{{ item }}'
@@ -16,6 +17,7 @@
       - 'deb http://repository.spotify.com stable non-free'
       - 'deb http://debian.yeasoft.net/btsync testing main'
       - 'deb http://linux.dropbox.com/debian jessie main'
+      - 'deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu utopic main'
 
   - name: Add apt repositories
     apt_repository: repo='{{ item }}'
@@ -26,6 +28,7 @@
       - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:tuxpoldo/btsync'
       - 'ppa:zeal-developers/ppa'
+      - 'ppa:neovim-ppa/unstable'
 
   - name: Update apt caches
     apt: update_cache=yes
@@ -321,6 +324,7 @@
       - icedtea-7-plugin
       - ipcalc
       - keepassx
+      - neovim
       - openjdk-7-jre
       - pidgin
       - pidgin-guifications
