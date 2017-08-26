@@ -13,7 +13,7 @@ With this playbook I setup the following in my setup:
 
   - BTSync
   - Caffeine Plus
-  - Calibre
+  - Calibre :white_check_mark:
   - Dropbox
   - Firefox
   - Gimp
@@ -38,7 +38,7 @@ With this playbook I setup the following in my setup:
   - Terminator
   - Thefuck
   - UNetBootIn
-  - [Zeal (Dash clone)][http://zealdocs.org/]
+  - [Zeal (Dash clone)](http://zealdocs.org/)
 
 ## Requirements:
 
