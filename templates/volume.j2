@@ -1,0 +1,28 @@
+device_id=$(amixer controls 2>&1 | grep "Master Playback Volume" | cut -d, -f1)
+max=$(amixer cget ${device_id} 2>&1 | grep max | awk -F, '{print $5}' | cut -d= -f2)
+
+usage() {
+  echo "Usage: volume [percent]"
+  exit 1
+}
+
+show() {
+  volume=$(amixer cget ${device_id} | grep ": values=" | cut -d= -f2 | cut -d, -f1)
+  percent=$(((${volume} * 100 + (${max} - 1)) / ${max})) 
+  echo ${percent%.*}
+}
+
+change() {
+  [ ${1} -lt 0 -o ${1} -gt 100 ] && usage
+  new_percent=${1}
+
+  new_volume=$((${new_percent} * ${max} / 100))
+  amixer cset ${device_id} ${new_volume} &> /dev/null
+  show
+}
+
+if [ "${1}" == "" ]; then
+  show
+else
+  change ${1}
+fi

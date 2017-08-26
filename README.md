@@ -29,9 +29,10 @@ With this playbook I setup the following in my setup:
   - OpenJDK Java JRE 7
   - Pidgin
   - Pwgen
-  - Remmina
+  - Remmina (RDP client)
   - RVM
   - Spotify
+  - Slack (Scudcloud)
   - Telegram Desktop
   - Terminator
   - Thefuck

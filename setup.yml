@@ -1,60 +1,80 @@
 - hosts: all
-  sudo: yes
+  become: yes
   tasks:
-  - name: Add apt repositories keys
+  - name: Install requirements for APT (Debian)
+    apt: name={{ item }} state=present
+    when: ansible_distribution == 'Debian'
+    with_items:
+     - apt-transport-https
+     - software-properties-common
+
+  - name: Add apt repositories keys (Common)
     apt_key: keyserver={{ item.server }} id={{ item.id }}
     with_items:
       - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
       - { server: 'keys.gnupg.net', id: '6BF18B15' }
-      - { server: 'pgp.mit.edu', id: '5044912E' }
       - { server: 'keyserver.ubuntu.com', id: '8231B6DD' }
+      - { server: 'pgp.mit.edu', id: '5044912E' }
+      - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
-  - name: Add apt repositories
+  - name: Add apt repositories (Debian)
     apt_repository: repo='{{ item }}'
     when: ansible_distribution == 'Debian'
     with_items:
-      - 'deb http://http.debian.net/debian jessie main contrib non-free'
+      - 'deb http://http.debian.net/debian stretch main contrib non-free'
       - 'deb http://repository.spotify.com stable non-free'
-      - 'deb http://debian.yeasoft.net/btsync testing main'
-      - 'deb http://linux.dropbox.com/debian jessie main'
-      - 'deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu utopic main'
+      - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
 
-  - name: Add apt repositories
+  - name: Add apt repositories (non-Debian)
     apt_repository: repo='{{ item }}'
     when: ansible_distribution != 'Debian'
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
       - 'ppa:nilarimogard/webupd8'
-      - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:tuxpoldo/btsync'
+      - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:zeal-developers/ppa'
-      - 'ppa:neovim-ppa/unstable'
+      - 'ppa:rael-gc/scudcloud'
 
   - name: Update apt caches
-    apt: update_cache=yes
+    apt: update_cache=yes cache_valid_time=86400
 
   - name: Detect PCI devices
     shell: lspci
     register: lspci
 
-  - name: Install BCM43224 firmware
+  - name: Detect USB devices
+    shell: lsusb
+    register: lsusb
+
+  - name: Install BCM43224 firmware (Debian and BCM43224)
     apt: name=firmware-brcm80211
     when: ansible_distribution == 'Debian' and lspci.stdout.find('BCM43224')
 
+  - name: Install iwlwifi firmware (Debian and Lenovo)
+    apt: name=firmware-iwlwifi
+    when: ansible_distribution == 'Debian' and lspci.stdout.find('Intel Corporation Centrino Ultimate-N 6300 3x3 AGN')
+
+  - name: Install tpb (Lenovo Thinkpad)
+    apt: name=tpb state=present
+    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+
   - name: Check Bash-It is installed
-    shell: sudo -u {{ user }} -i bash-it
+    shell: bash -lc bash-it
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Clone Bash-It into home
     git: repo=http://github.com/Bash-it/bash-it.git dest=/home/{{ user }}/.bash_it
-    sudo_user: '{{ user }}'
+    become_user: '{{ user }}'
     when: result|failed
   - name: Setup Bash-It
     template: src=templates/bashrc.j2 dest=/home/{{ user }}/.bashrc
-    sudo_user: '{{ user }}'
+    become_user: '{{ user }}'
     when: result|failed
   - name: Enable Bash-It aliases
-    shell: sudo -u {{ user }} -i bash-it enable alias {{ item }}
+    shell: bash -lc "bash-it enable alias {{ item }}"
+    become_user: '{{ user }}'
     when: result|failed
     with_items:
       - ansible
@@ -69,7 +89,8 @@
       - vagrant
       - vim
   - name: Enable Bash-It completions
-    shell: sudo -u {{ user }} -i bash-it enable completion {{ item }}
+    shell: bash -lc "bash-it enable completion {{ item }}"
+    become_user: '{{ user }}'
     when: result|failed
     with_items:
       - bash-it
@@ -86,15 +107,14 @@
       - vagrant
       - virtualbox
   - name: Enable Bash-It plugins
-    shell: sudo -u {{ user }} -i bash-it enable plugin {{ item }}
+    shell: bash -lc "bash-it enable plugin {{ item }}"
+    become_user: '{{ user }}'
     when: result|failed
     with_items:
       - aws
       - base
       - battery
       - browser
-      - dirs
-      - docker
       - dirs
       - docker
       - extract
@@ -111,7 +131,8 @@
       - ssh
 
   - name: Check Telegram is installed
-    shell: sudo -u {{ user }} -i which telegram
+    shell: which telegram
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Download Telegram package
@@ -119,8 +140,10 @@
     when: result|failed
   - name: Unpack Telegram
     shell: tar -xJf /tmp/telegram.tar.xz chdir=/opt creates=/opt/Telegram
+    when: result|failed
   - name: Install Telegram
     shell: ln -s /opt/Telegram/Telegram /usr/bin/telegram creates=/usr/bin/telegram
+    when: result|failed
   - name: Setup Telegram Desktop icon
     copy: src=files/telegram.png dest=/usr/share/icons/hicolor/128x128/apps/telegram.png
     when: result|failed
@@ -128,10 +151,11 @@
     template: src=templates/telegram.desktop.j2 dest=/usr/share/applications/telegram.desktop
     when: result|failed
   - name: Remove Telegram package
-    shell: rm /tmp/telegram.tar.xz removes=/tmp/telegram.tar.xz
+    file: path=/tmp/telegram.tar.xz state=absent
 
   - name: Check Chrome is installed
-    shell: sudo -u {{ user }} -i which google-chrome
+    shell: which google-chrome
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Download Chrome package
@@ -140,15 +164,18 @@
   - name: Install Chrome
     apt: deb=/tmp/chrome.deb
     when: result|failed
+  - name: Setup Chrome alias
+    lineinfile: dest=/home/{{ user }}/.bashrc line='alias chrome=google-chrome'
   - name: Remove Chrome package
-    shell: rm /tmp/chrome.deb removes=/tmp/chrome.deb
+    file: path=/tmp/chrome.deb state=absent
 
   - name: Check Go is installed
-    shell: sudo -u {{ user }} -i which go
+    shell: ls /usr/local/go/bin/go
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Download Go package
-    get_url: url=https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz dest=/tmp/go.tgz
+    get_url: url=https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz dest=/tmp/go.tgz
     when: result|failed
   - name: Unpack Go
     shell: tar -xzf /tmp/go.tgz chdir=/usr/local creates=/usr/local/go
@@ -157,15 +184,16 @@
   - name: Setup Go
     lineinfile: dest=/home/{{ user }}/.bashrc line='export GOPATH=$HOME'
   - name: Remove Go package
-    shell: rm /tmp/go.tgz removes=/tmp/go.tgz
+    file: path=/tmp/go.tgz state=absent
 
   - name: Check Hub is installed
-    shell: sudo -u {{ user }} -i which hub
+    shell: ls /home/{{ user }}/bin/hub
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Install Hub
     shell: GOPATH=/home/{{ user }} /usr/local/go/bin/go get github.com/github/hub creates=/home/{{ user }}/bin/hub
-    sudo_user: '{{ user }}'
+    become_user: '{{ user }}'
     when: result|failed
   - name: Setup Hub
     lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/bin'
@@ -173,57 +201,70 @@
     lineinfile: dest=/home/{{ user }}/.bashrc line='alias git=hub'
 
   - name: Check Heroku Toolbelt is installed
-    shell:  sudo -u {{ user }} -i which heroku
+    shell:  which heroku
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Download Heroku Toolbelt installer
-    get_url: url=https://toolbelt.heroku.com/install-ubuntu.sh dest=/tmp/heroku.sh
+    get_url: url=https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz dest=/tmp/heroku.tar.gz
     when: result|failed
-  - name: Install Heroku Toolbelt
-    shell: cat /tmp/heroku.sh | sh
+  - name: Unarchive Heroku Installer
+    unarchive: src=/tmp/heroku.tar.gz dest=/usr/local/lib
     when: result|failed
-  - name: Remove Heroku Toolbelt installer
-    shell: rm /tmp/heroku.sh removes=/tmp/heroku.sh
+  - name: Install Heroku
+    shell: /usr/local/lib/heroku/install
 
   - name: Check Dropbox is installed
-    shell: sudo -u {{ user }} -i which dropbox
+    shell: ls /home/{{ user }}/Dropbox
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
-  - name: Install Dropbox
+  - name: Install Dropbox (Ubuntu)
     apt: name=nautilus-dropbox
-    when: result|failed and ansible_distribution != 'Debian'
-  - name: Install Dropbox
-    apt: name=dropbox
-    when: result|failed and ansible_distribution == 'Debian'
-  - name: Setup Dropbox
+    when: result|failed and ansible_distribution == 'Ubuntu'
+  - name: Setup Dropbox (Ubuntu)
     shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
-    sudo_user: '{{ user }}'
-    when: result|failed and ansible_distribution != 'Debian'
-  - name: Rename Dropbox client
+    become_user: '{{ user }}'
+    when: result|failed and ansible_distribution == 'Ubuntu'
+  - name: Rename Dropbox client (Ubuntu)
     shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
-    when: result|failed and ansible_distribution != 'Debian'
-  - name: Put Dropbox client wrapper
+    when: result|failed and ansible_distribution == 'Ubuntu'
+  - name: Put Dropbox client wrapper (Ubuntu)
     template: src=templates/dropbox.j2 dest=/usr/bin/dropbox mode=0755
-    when: result|failed and ansible_distribution != 'Debian'
+    when: result|failed and ansible_distribution == 'Ubuntu'
+  - name: Download Dropbox (Debian)
+    get_url: url=https://www.dropbox.com/download?plat=lnx.x86_64 dest=/tmp/dropbox.tar.gz
+    when: result|failed and ansible_distribution == 'Debian'
+  - name: Unarchive Dropbox (Debian)
+    unarchive: src=/tmp/dropbox.tar.gz dest=/home/{{ user }}
+    become_user: '{{ user }}'
+    when: result|failed and ansible_distribution == 'Debian'
+  - name: Setup Dropbox (Debian)
+    shell: nohup /home/{{ user }}/.dropbox-dist/dropboxd &
+    become_user: '{{ user }}'
+    when: result|failed and ansible_distribution == 'Debian'
 
   - name: Check Miniconda is installed
-    shell: sudo -u {{ user }} -i which conda
+    shell: ls /home/{{ user }}/.miniconda
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Download Miniconda installer
-    get_url: url=https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh dest=/tmp/Miniconda.sh
+    get_url: url=https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh dest=/tmp/Miniconda.sh
     when: result|failed
   - name: Install Miniconda
-    shell: sudo -u {{ user }} -i bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda
+    shell: bash -lc "bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda"
+    become_user: '{{ user }}'
     when: result|failed
   - name: Setup Conda
     lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/.miniconda/bin'
     when: result|failed
   - name: Remove Miniconda installer
-    shell: rm /tmp/Miniconda.sh removes=/tmp/Miniconda.sh
+    file: path=/tmp/Miniconda.sh state=absent
 
   - name: Check RVM is installed
-    shell: sudo -u {{ user }} -i rvm
+    shell: bash -lc "rvm"
+    become_user: '{{ user }}'
     register: result
     ignore_errors: True
   - name: Setup RVM keyserver
@@ -236,7 +277,7 @@
     apt: name=curl
     when: ansible_distribution == 'Debian'
   - name: Install RVM
-    shell: sudo bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
+    shell: bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
     when: result|failed
   - name: Setup PATH for RVM
     lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
@@ -258,37 +299,42 @@
       - mythes-en-us
 
   - name: Install Caffeine Plus
-    apt: name=caffeine-plus
+    apt: name=caffeine-plus state=present
     when: ansible_distribution != 'Debian'
-  - name: Prepare for Caffeine Gnome Ext. install
-    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.local/share/gnome-shell/extensions/caffeine@patapon.info
+  - name: Install Caffeine
+    apt: name=caffeine state=present
     when: ansible_distribution == 'Debian'
-  - name: Get Caffeine Gnome Ext.
-    get_url: url=https://extensions.gnome.org/download-extension/caffeine@patapon.info.shell-extension.zip?version_tag=4792 dest=/tmp/caffeine.zip
-    when: ansible_distribution == 'Debian'
-  - name: Install Caffeine Gnome Ext.
-    unarchive: src=/tmp/caffeine.zip dest=/home/{{ user }}/.local/share/gnome-shell/extensions/caffeine@patapon.info
-    sudo_user: vagrant
-    when: ansible_distribution == 'Debian'
+
+  - name: Configure MS TTF Core Fonts EULA to accepted
+    debconf:
+     name: ttf-mscorefonts-installer
+     question: msttcorefonts/accepted-mscorefonts-eula
+     value: true
+     vtype: select
 
   - name: Check Powerline font is required
     shell: ls /home/{{ user }}/.fonts/PowerlineSymbols.otf
     register: font_installed
     ignore_errors: True
   - name: Make font dir
-    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.fonts
+    file: path=/home/{{ user }}/.fonts state=directory mode=0755
+    become_user: '{{ user }}'
     when: font_installed|failed
   - name: Download Powerline font
     get_url: url=https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf dest=/home/{{ user }}/.fonts
+    become_user: '{{ user }}'
     when: font_installed|failed
   - name: Make fontconfig dir
-    shell: sudo -u {{ user }} -i mkdir -p /home/{{ user }}/.config/fontconfig/conf.d
+    file: path=/home/{{ user }}/.config/fontconfig/conf.d state=directory mode=0755
+    become_user: '{{ user }}'
     when: font_installed|failed
   - name: Download Powerline fontconfig file
     get_url: url=https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf dest=/home/{{ user }}/.config/fontconfig/conf.d
+    become_user: '{{ user }}'
     when: font_installed|failed
   - name: Update font cache
-    shell:  sudo -u {{ user }} -i fc-cache -vf /home/{{ user }}/.fonts
+    shell: fc-cache -vf /home/{{ user }}/.fonts
+    become_user: '{{ user }}'
     when: font_installed|failed
 
   - name: Install pip packages
@@ -307,8 +353,10 @@
   - name: Install apt packages
     apt: name={{ item }}
     with_items:
-      - btsync
+      - awesome
+      - awesome-extra
       - calibre
+      - dhcpcd5
       - gimp
       - gimp-data-extras
       - gimp-dcraw
@@ -321,22 +369,31 @@
       - gimp-texturize
       - gnome-disk-utility
       - htop
-      - icedtea-7-plugin
       - ipcalc
       - keepassx
-      - neovim
-      - openjdk-7-jre
       - pidgin
       - pidgin-guifications
       - pidgin-hotkeys
-      - pidgin-lastfm
       - pidgin-themes
       - pidgin-twitter
       - python-argcomplete
       - remmina
       - remmina-plugin-rdp
       - remmina-plugin-vnc
+      - scudcloud
       - spotify-client
       - terminator
       - vlc
+      - wpasupplicant
       - zeal
+
+  - name: Setup Awesome
+    template: src=templates/Xsession.j2 dest=/home/{{ user }}/.Xsession
+    become_user: '{{ user }}'
+
+  - name: Setup Util scripts
+    template: src=templates/{{ item }}.j2 dest=/home/{{ user }}/bin/{{ item }} mode=0755
+    become_user: '{{ user }}'
+    with_items:
+     - wifi
+     - volume

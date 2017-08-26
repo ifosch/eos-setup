@@ -1,0 +1,88 @@
+wlan=$(ip addr | egrep "^[0-9]+: w" | cut -d\  -f2 | tr -d ':')
+
+usage() {
+  echo "Usage: $0 {connect [SSID]|reconnect|list|scan}"
+}
+
+error() {
+  if [ -e "${1}" ]; then
+    cat ${1} 2>/dev/null
+  elif [ "${1}" != "" ]; then
+    echo "${1}"
+  else
+    echo "Something went wrong"
+  fi
+  exit 1
+}
+
+reconnect() {
+  echo "Disconnecting..."
+  sudo ifdown ${wlan} &> /tmp/ifdown.${wlan} || error /tmp/ifdown.${wlan}
+  echo "Connecting..."
+  sudo ifup ${wlan} &> /tmp/ifup.${wlan} || error /tmp/ifup.${wlan}
+  grep DHCPACK /tmp/ifup.${wlan} &> /dev/null || error "DHCP failed"
+  IP=$(ip address show dev ${wlan} | grep "inet " | awk '{print $2}')
+  echo "Connected with IP ${IP}"
+  exit 0
+}
+
+scan() {
+  sudo iwlist scan 2>&1 | egrep "Address|ESSID"
+  exit 0
+}
+
+list() {
+  sudo grep ssid /etc/network/interfaces.d/*
+  exit 0
+}
+
+connect() {
+  if [ "${1}" == "" ]; then
+    echo -n "SSID: "
+    read ssid
+  else
+    ssid=${1}
+  fi
+  wlan_interface_file=/etc/network/interfaces.d/${wlan}.cfg
+  sudo killall -9 wpa_supplicant &> /dev/null
+  if [ ! -e ${wlan_interface_file} ] || \
+     sudo grep -v ${ssid} ${wlan_interface_file} &>/dev/null; then
+    wpa_supplicant_cfg=/etc/wpa_supplicant/wpa_suplicant_${ssid}.conf
+    if [ ! -e ${wpa_supplicant_cfg} ]; then
+      echo -n "Password: "
+      read -s password
+      echo -e "\nCalulating PSK..."
+      sudo bash -lc "wpa_passphrase ${ssid} ${password} > ${wpa_supplicant_cfg}"
+    fi
+    psk=$(cat ${wpa_supplicant_cfg} | grep "[^#]psk=" | cut -d= -f2)
+    echo "Configuring interface..."
+    sudo bash -l << EOC
+cat > ${wlan_interface_file} <<EOF
+auto wlp3s0
+iface wlp3s0 inet dhcp
+	wpa-ssid ${ssid}
+	wpa-psk ${psk}
+EOF
+EOC
+    sudo chmod 0600 ${wlan_interface_file}
+  fi
+  reconnect
+}
+
+case "${1}" in
+"list")
+  list
+  ;;
+"scan")
+  scan
+  ;;
+"reconnect")
+  reconnect
+  ;;
+"connect")
+  connect ${2}
+  ;;
+*)
+  usage
+  ;;
+esac
