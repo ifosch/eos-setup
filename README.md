@@ -25,6 +25,7 @@ With this playbook I setup the following in my setup:
   - Heroku Toolbelt :white_check_mark:
   - Ipcalc :white_check_mark:
   - KeepassX :white_check_mark:
+  - [Keybase](www.keybase.com) :white_check_mark:
   - LibreOffice :white_check_mark:
   - [NVM](https://github.com/creationix/nvm.git) :white_check_mark:
   - OpenJDK Java JRE 8 :white_check_mark:
