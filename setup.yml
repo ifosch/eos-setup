@@ -377,6 +377,7 @@
       - pidgin-themes
       - pidgin-twitter
       - python-argcomplete
+      - pwgen
       - remmina
       - remmina-plugin-rdp
       - remmina-plugin-vnc
