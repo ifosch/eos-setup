@@ -14,31 +14,30 @@ With this playbook I setup the following in my setup:
   - BTSync
   - Caffeine Plus
   - Calibre :white_check_mark:
-  - Dropbox
-  - Firefox
-  - Gimp
-  - Github Hub
+  - Dropbox :white_check_mark:
+  - Firefox :white_check_mark:
+  - Gimp :white_check_mark:
+  - Github Hub :white_check_mark:
   - Google Chrome (with hangouts)
-  - Google Go
-  - Htop
-  - Heroku Toolbelt
-  - Ipcalc
-  - KeepassX
-  - LibreOffice
-  - NVM
-  - OpenJDK Java JRE 7
-  - Pidgin
+  - Google Go :white_check_mark:
+  - Htop :white_check_mark:
+  - Heroku Toolbelt :white_check_mark:
+  - Ipcalc :white_check_mark:
+  - KeepassX :white_check_mark:
+  - LibreOffice :white_check_mark:
+  - OpenJDK Java JRE 8 :white_check_mark:
+  - Pidgin :white_check_mark:
   - Pwgen
-  - Remmina (RDP client)
+  - Remmina (RDP client) :white_check_mark:
   - RVM
-  - Spotify
-  - Slack (Scudcloud)
-  - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros)
-  - Telegram Desktop
-  - Terminator
+  - Spotify :white_check_mark:
+  - Slack (Scudcloud) :white_check_mark:
+  - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros) :white_check_mark:
+  - Telegram Desktop :white_check_mark:
+  - Terminator :white_check_mark:
   - Thefuck
   - UNetBootIn
-  - [Zeal (Dash clone)](http://zealdocs.org/)
+  - [Zeal (Dash clone)](http://zealdocs.org/) :white_check_mark:
 
 ## Requirements:
 
