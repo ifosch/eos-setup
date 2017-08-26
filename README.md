@@ -35,8 +35,7 @@ With this playbook I setup the following in my setup:
   - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros) :white_check_mark:
   - Telegram Desktop :white_check_mark:
   - Terminator :white_check_mark:
-  - Thefuck
-  - UNetBootIn
+  - Thefuck :white_check_mark:
   - [Zeal (Dash clone)](http://zealdocs.org/) :white_check_mark:
 
 ## Requirements:

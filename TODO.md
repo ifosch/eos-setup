@@ -15,6 +15,7 @@ Not needed anymore, so unlikely to add:
   - [Kid3](http://kid3.sourceforge.net/#download)
   - [Levelator](http://cdn.conversationsnetwork.org/Levelator-1.3.0-Python2.5.tar.bz2)
   - [Audacity](http://ubuntuhandbook.org/index.php/2015/04/install-audacity-audio-editor-2-1-0-in-ubuntu-from-ppa/)
+  - UNetBootIn
 
 # Find a way to install:
 
