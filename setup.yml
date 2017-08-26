@@ -475,6 +475,7 @@
 
   - name: Check Keybase is installed
     shell: bash -lc keybase
+    become_user: '{{ user }}'
     register: keybase_installed
     ignore_errors: True
   - name: Download Keybase deb package
@@ -486,3 +487,18 @@
   - name: Remove Keybase deb package
     file: path=/tmp/keybase.deb state=absent
     when: keybase_installed|failed
+
+  - name: Check Vagrant is installed
+    shell: which vagrant
+    become_user: '{{ user }}'
+    register: vagrant_installed
+    ignore_errors: True
+  - name: Download Vagrant deb package
+    get_url: url=https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb dest=/tmp/vagrant.deb
+    when: vagrant_installed|failed
+  - name: Install Vagrant
+    apt: deb=/tmp/vagrant.deb
+    when: vagrant_installed|failed
+  - name: Remove Vagrant deb package
+    file: path=/tmp/vagrant.deb state=absent
+    when: vagrant_installed|failed

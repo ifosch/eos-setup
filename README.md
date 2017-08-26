@@ -39,6 +39,7 @@ With this playbook I setup the following in my setup:
   - Telegram Desktop :white_check_mark:
   - Terminator :white_check_mark:
   - Thefuck :white_check_mark:
+  - [Vagrant](www.vagrantup.com) :white_check_marker:
   - [VirtualBox 5.1](https://download.docker.com/linux/debian/gpg) :white_check_mark:
   - [Zeal (Dash clone)](http://zealdocs.org/) :white_check_mark:
 
