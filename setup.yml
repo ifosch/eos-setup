@@ -357,6 +357,7 @@
       - awesome-extra
       - calibre
       - dhcpcd5
+      - emacs
       - gimp
       - gimp-data-extras
       - gimp-dcraw
@@ -397,3 +398,27 @@
     with_items:
      - wifi
      - volume
+
+  - name: Check Spacemacs installed
+    shell: ls /home/{{ user }}/.spacemacs
+    ignore_errors: true
+    register: spacemacs_installed
+  - name: Remove Emacs config file
+    file: path=/home/{{ user }}/.emacs state=absent
+    when: spacemacs_installed|failed
+  - name: Remove Emacs config dir
+    file: path=/home/{{ user }}/.emacs.d state=absent
+    when: spacemacs_installed|failed
+  - name: Clone Spacemacs
+    git: repo=http://github.com/syl20bnr/spacemacs dest=/home/{{ user }}/.emacs.d
+    become_user: '{{ user }}'
+    when: spacemacs_installed|failed
+  - name: Install Source Code Pro font
+    git: repo=https://github.com/adobe-fonts/source-code-pro version=release depth=1 dest=/home/{{ user }}/.fonts/adobe-source-code-pro
+    become_user: '{{ user }}'
+    register: source_code_pro_installed
+    when: spacemacs_installed|failed
+  - name: Update font cache
+    shell: fc-cache -vf /home/{{ user }}/.fonts/adobe-source-code-pro
+    become_user: '{{ user }}'
+    when: source_code_pro_installed|succeeded
