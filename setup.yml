@@ -421,7 +421,7 @@
 
   - name: Check Spacemacs installed
     shell: ls /home/{{ user }}/.spacemacs
-    ignore_errors: true
+    ignore_errors: True
     register: spacemacs_installed
   - name: Remove Emacs config file
     file: path=/home/{{ user }}/.emacs state=absent
@@ -442,3 +442,22 @@
     shell: fc-cache -vf /home/{{ user }}/.fonts/adobe-source-code-pro
     become_user: '{{ user }}'
     when: source_code_pro_installed|succeeded
+
+  - name: Check NVM is installed
+    shell: '[ -d /home/{{ user }}/.nvm ] && bash -lc nvm'
+    become_user: '{{ user }}'
+    register: nvm_installed
+    ignore_errors: True
+  - name: Install NVM
+    git: repo=https://github.com/creationix/nvm.git dest=/home/{{ user }}/.nvm version=v0.33.2
+    become_user: '{{ user }}'
+    when: nvm_installed|failed
+  - name: Setup NVM
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: |
+              export NVM_DIR="${HOME}/.nvm"
+              [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+              [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"
+    become_user: '{{ user }}'
+    when: nvm_installed|failed
