@@ -1,6 +1,5 @@
 # Add to setup.yml when machine is big enough:
 
-  - [Docker](www.docker.com)
   - [Keybase](www.keybase.com)
   - [Dropbox CLI](https://github.com/dropbox/dbxcli)
   - [Steam](https://steamcdn-a.akamaihd.net/client/installer/steam.deb)
