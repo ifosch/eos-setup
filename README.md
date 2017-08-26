@@ -36,7 +36,6 @@ With this playbook I setup the following in my setup:
   - Telegram Desktop :white_check_mark:
   - Terminator :white_check_mark:
   - Thefuck :white_check_mark:
-  - UNetBootIn
   - [Zeal (Dash clone)](http://zealdocs.org/) :white_check_mark:
 
 ## Requirements:
