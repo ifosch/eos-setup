@@ -1,7 +1,6 @@
 # Add to setup.yml when machine is big enough:
 
   - [NVM|https://github.com/creationix/nvm.git]
-  - [Spacemacs|https://github.com/syl20bnr/spacemacs#linux-distros]
   - [Slack for Linux Beta|https://get.slack.help/hc/en-us/articles/212924728-Slack-for-Linux-beta-#debian-1]
   - [Dropbox CLI|https://github.com/dropbox/dbxcli]
   - [BTSync|https://www.howtoforge.com/install-bittorrent-sync-on-debian-and-ubuntu-linux#-install-bittorrent-sync-on-debian-ubuntu-desktop]

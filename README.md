@@ -33,6 +33,7 @@ With this playbook I setup the following in my setup:
   - RVM
   - Spotify
   - Slack (Scudcloud)
+  - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros)
   - Telegram Desktop
   - Terminator
   - Thefuck
