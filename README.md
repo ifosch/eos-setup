@@ -13,6 +13,7 @@ With this playbook I setup the following in my setup:
 
   - Caffeine Plus
   - Calibre :white_check_mark:
+  - Conda
   - Dropbox :white_check_mark:
   - Firefox :white_check_mark:
   - Gimp :white_check_mark:
