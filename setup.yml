@@ -20,6 +20,9 @@
   - name: Add Docker apt repository keys
     apt_key: url="https://download.docker.com/linux/debian/gpg" id='0EBFCD88'
 
+  - name: Add VirtualBox apt repository keys
+    apt_key: url="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+
   - name: Add apt repositories (Debian)
     apt_repository: repo='{{ item }}'
     when: ansible_distribution == 'Debian'
@@ -27,6 +30,7 @@
       - 'deb http://http.debian.net/debian stretch main contrib non-free'
       - 'deb http://repository.spotify.com stable non-free'
       - 'deb [arch=amd64] https://download.docker.com/linux/debian stretch stable'
+      - 'deb http://download.virtualbox.org/virtualbox/debian stretch contrib'
 
   - name: Add apt repositories (non-Debian)
     apt_repository: repo='{{ item }}'
@@ -404,6 +408,7 @@
       - scudcloud
       - spotify-client
       - terminator
+      - virtualbox-5.1
       - vlc
       - wpasupplicant
       - xbacklight
