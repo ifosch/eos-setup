@@ -31,7 +31,6 @@
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
       - 'ppa:nilarimogard/webupd8'
-      - 'ppa:tuxpoldo/btsync'
       - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:zeal-developers/ppa'
       - 'ppa:rael-gc/scudcloud'

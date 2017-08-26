@@ -11,7 +11,6 @@ That's why when I found easier to install Linux in a MacBook, I decided to prepa
 
 With this playbook I setup the following in my setup:
 
-  - BTSync
   - Caffeine Plus
   - Calibre :white_check_mark:
   - Dropbox :white_check_mark:
