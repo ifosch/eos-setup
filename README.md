@@ -29,7 +29,7 @@ With this playbook I setup the following in my setup:
   - Pidgin :white_check_mark:
   - Pwgen :white_check_mark:
   - Remmina (RDP client) :white_check_mark:
-  - RVM
+  - RVM :white_check_mark:
   - Spotify :white_check_mark:
   - Slack (Scudcloud) :white_check_mark:
   - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros) :white_check_mark:
