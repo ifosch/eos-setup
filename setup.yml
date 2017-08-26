@@ -17,13 +17,16 @@
       - { server: 'pgp.mit.edu', id: '5044912E' }
       - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
+  - name: Add Docker apt repository keys
+    apt_key: url="https://download.docker.com/linux/debian/gpg" id='0EBFCD88'
+
   - name: Add apt repositories (Debian)
     apt_repository: repo='{{ item }}'
     when: ansible_distribution == 'Debian'
     with_items:
       - 'deb http://http.debian.net/debian stretch main contrib non-free'
       - 'deb http://repository.spotify.com stable non-free'
-      - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
+      - 'deb [arch=amd64] https://download.docker.com/linux/debian stretch stable'
 
   - name: Add apt repositories (non-Debian)
     apt_repository: repo='{{ item }}'
@@ -34,6 +37,7 @@
       - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:zeal-developers/ppa'
       - 'ppa:rael-gc/scudcloud'
+      - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
 
   - name: Update apt caches
     apt: update_cache=yes cache_valid_time=86400
@@ -353,6 +357,7 @@
   - name: Install pip packages
     pip: name={{ item }}
     with_items:
+      - docker-compose
       - psutil
       - thefuck
 
@@ -370,6 +375,7 @@
       - awesome-extra
       - calibre
       - dhcpcd5
+      - docker-ce
       - emacs
       - gimp
       - gimp-data-extras
