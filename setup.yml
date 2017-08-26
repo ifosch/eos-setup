@@ -58,6 +58,18 @@
     apt: name=tpb state=present
     when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
 
+  - name: Enable Screen brightness control (Lenovo Thinkpad)
+    lineinfile: dest=/etc/default/grub line='GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor"'
+    register: grub_update
+    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+  - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
+    shell: update-grub
+    become: true
+    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad') and grub_update|succeeded
+  - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
+    template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
+    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+
   - name: Check Bash-It is installed
     shell: bash -lc bash-it
     become_user: '{{ user }}'
@@ -388,10 +400,16 @@
       - terminator
       - vlc
       - wpasupplicant
+      - xbacklight
       - zeal
 
-  - name: Setup Awesome
+  - name: Setup Awesome in XSession
     template: src=templates/Xsession.j2 dest=/home/{{ user }}/.Xsession
+    become_user: '{{ user }}'
+  - name: Create Awesome config dir
+    file: path=/home/{{ user }}/.config/awesome state=directory mode=0755 owner={{ user }} group={{ user }}
+  - name: Setup Awesome
+    template: src=templates/awesome.lua.j2 dest=/home/{{ user }}/.config/awesome/rc.lua
     become_user: '{{ user }}'
 
   - name: Setup Util scripts
