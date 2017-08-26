@@ -17,7 +17,7 @@ With this playbook I setup the following in my setup:
   - Firefox :white_check_mark:
   - Gimp :white_check_mark:
   - Github Hub :white_check_mark:
-  - Google Chrome (with hangouts)
+  - Google Chrome (with hangouts) :white_check_mark:
   - Google Go :white_check_mark:
   - Htop :white_check_mark:
   - Heroku Toolbelt :white_check_mark:
