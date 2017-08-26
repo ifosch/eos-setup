@@ -11,14 +11,14 @@ That's why when I found easier to install Linux in a MacBook, I decided to prepa
 
 With this playbook I setup the following in my setup:
 
-  - BTSync
   - Caffeine Plus
   - Calibre :white_check_mark:
+  - Conda :white_check_mark:
   - Dropbox :white_check_mark:
   - Firefox :white_check_mark:
   - Gimp :white_check_mark:
   - Github Hub :white_check_mark:
-  - Google Chrome (with hangouts)
+  - Google Chrome (with hangouts) :white_check_mark:
   - Google Go :white_check_mark:
   - Htop :white_check_mark:
   - Heroku Toolbelt :white_check_mark:
@@ -27,9 +27,9 @@ With this playbook I setup the following in my setup:
   - LibreOffice :white_check_mark:
   - OpenJDK Java JRE 8 :white_check_mark:
   - Pidgin :white_check_mark:
-  - Pwgen
+  - Pwgen :white_check_mark:
   - Remmina (RDP client) :white_check_mark:
-  - RVM
+  - RVM :white_check_mark:
   - Spotify :white_check_mark:
   - Slack (Scudcloud) :white_check_mark:
   - [Spacemacs](https://github.com/syl20bnr/spacemacs#linux-distros) :white_check_mark:

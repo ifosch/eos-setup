@@ -31,7 +31,6 @@
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
       - 'ppa:nilarimogard/webupd8'
-      - 'ppa:tuxpoldo/btsync'
       - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:zeal-developers/ppa'
       - 'ppa:rael-gc/scudcloud'
@@ -279,6 +278,8 @@
   - name: Install RVM
     shell: bash /tmp/rvm.sh stable --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
     when: result|failed
+  - name: Setup RVM in session
+    lineinfile: dest=/home/{{ user }}/.bashrc line='. /etc/profile.d/rvm.sh'
   - name: Setup PATH for RVM
     lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
 
@@ -378,6 +379,7 @@
       - pidgin-themes
       - pidgin-twitter
       - python-argcomplete
+      - pwgen
       - remmina
       - remmina-plugin-rdp
       - remmina-plugin-vnc
