@@ -19,6 +19,12 @@
 
   - name: Add Docker apt repository keys
     apt_key: url="https://download.docker.com/linux/debian/gpg" id='0EBFCD88'
+    register: docker_keys
+    ignore_errors: True
+  - name: Get Docker apt repository keys
+    shell: curl https://download.docker.com/linux/debian/gpg | apt-key add -
+    become: True
+    when: docker_keys|failed
 
   - name: Add VirtualBox apt repository keys
     apt_key: url="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
