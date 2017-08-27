@@ -556,7 +556,12 @@
     ignore_errors: True
   - name: Download Packer ZIP
     get_url: url=https://releases.hashicorp.com/packer/1.0.4/packer_1.0.4_linux_amd64.zip dest=/tmp/packer.zip
+    register: packer_download
+    ignore_errors: True
     when: packer_installed|failed
+  - name: Get Packer ZIP
+    shell: curl https://releases.hashicorp.com/packer/1.0.4/packer_1.0.4_linux_amd64.zip > /tmp/packer.zip
+    when: packer_download|failed
   - name: Install Packer
     unarchive: src=/tmp/packer.zip dest=/home/{{ user }}/bin creates=/home/{{ user }}/packer remote_src=yes
     become_user: '{{ user }}'
