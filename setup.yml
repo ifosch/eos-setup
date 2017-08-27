@@ -395,6 +395,19 @@
       - firefox
       - unetbootin
 
+  - name: Check Emacs installed
+    shell: dpkg -l emacs
+    register: emacs_installed
+    ignore_errors: True
+  - name: Check libgnutls30 version
+    shell: dpkg -l libgnutls30 | grep 3.5.8-5+deb9u2
+    register: libgnutls_version
+    ignore_errors: True
+    when: emacs_installed|failed
+  - name: Ensure libgnutls30 version
+    apt: name=libgnutls30=3.5.8-5+deb9u2 force=True dpkg_options=force-downgrade
+    when: emacs_installed|failed and libgnutls_version|failed
+
   - name: Install apt packages
     apt: name={{ item }}
     with_items:
