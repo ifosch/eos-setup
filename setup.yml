@@ -467,7 +467,7 @@
      - volume
 
   - name: Check Spacemacs installed
-    shell: ls /home/{{ user }}/.spacemacs
+    shell: ls /home/{{ user }}/.emacs.d/spacemacs.mk
     ignore_errors: True
     register: spacemacs_installed
   - name: Remove Emacs config file
@@ -488,7 +488,7 @@
   - name: Update font cache
     shell: fc-cache -vf /home/{{ user }}/.fonts/adobe-source-code-pro
     become_user: '{{ user }}'
-    when: source_code_pro_installed|succeeded
+    when: not source_code_pro_installed|failed
 
   - name: Check NVM is installed
     shell: '[ -d /home/{{ user }}/.nvm ] && bash -lc nvm'
