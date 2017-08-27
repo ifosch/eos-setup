@@ -343,7 +343,23 @@ globalkeys = awful.util.table.join(
               function ()
                   awful.util.spawn("xbacklight -dec 10")
               end,
-              {description = "Decrease brightness"})
+              {description = "Decrease brightness"}),
+    -- Volume
+    awful.key({ }, "#122",
+              function ()
+                  awful.util.spawn("volume -10", false)
+              end,
+              {description = "Decrease Volume"}),
+    awful.key({ }, "#123",
+              function ()
+                  awful.util.spawn("volume +10", false)
+              end,
+              {description = "Increase Volume"}),
+    awful.key({ }, "#121",
+              function ()
+                  awful.util.spawn("volume mute", false)
+              end,
+              {description = "Mute/Unmute Speakers/Headphones"})
 )
 
 clientkeys = awful.util.table.join(

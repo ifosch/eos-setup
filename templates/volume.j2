@@ -12,17 +12,43 @@ show() {
   echo ${percent%.*}
 }
 
+mute() {
+  amixer set Master toggle
+  echo "muted" >> /home/ifosch/prova.log
+}
+
 change() {
   [ ${1} -lt 0 -o ${1} -gt 100 ] && usage
   new_percent=${1}
 
   new_volume=$((${new_percent} * ${max} / 100))
   amixer cset ${device_id} ${new_volume} &> /dev/null
-  show
+  echo "changed to $(show)" >> /home/ifosch/prova.log
 }
 
-if [ "${1}" == "" ]; then
+cmd=${1-show}
+
+case $cmd in
+"show")
   show
-else
+;;
+"mute")
+  mute
+;;
++[0-9][0-9])
+  new_volume=$(($(show) + ${cmd}))
+  change ${new_volume}
+;;
+-[0-9][0-9])
+  new_volume=$(($(show) + ${cmd}))
+  change ${new_volume}
+;;
+[0-9][0-9])
   change ${1}
-fi
+;;
+*)
+  usage
+;;
+esac
+
+echo "end" >> /home/ifosch/prova.log
