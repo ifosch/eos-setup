@@ -1,5 +1,8 @@
 - hosts: all
   become: yes
+  vars:
+    thinkpad: no
+    mba11: no
   tasks:
   - name: Install requirements for APT (Debian)
     apt: name={{ item }} state=present
@@ -56,33 +59,41 @@
     shell: lspci
     register: lspci
 
+  - name: Set as MacBook Air 11
+    set_fact: mba11=yes
+    when: lspci.stdout.find('BCM43224') > 0
+
   - name: Detect USB devices
     shell: lsusb
     register: lsusb
 
+  - name: Set as Lenovo Thinkpad T430s
+    set_fact: thinkpad=yes
+    when: lsusb.stdout.find('thinkpad') > 0
+
   - name: Install BCM43224 firmware (Debian and BCM43224)
     apt: name=firmware-brcm80211
-    when: ansible_distribution == 'Debian' and lspci.stdout.find('BCM43224')
+    when: ansible_distribution == 'Debian' and mba11
 
   - name: Install iwlwifi firmware (Debian and Lenovo)
     apt: name=firmware-iwlwifi
-    when: ansible_distribution == 'Debian' and lspci.stdout.find('Intel Corporation Centrino Ultimate-N 6300 3x3 AGN')
+    when: ansible_distribution == 'Debian' and thinkpad
 
   - name: Install tpb (Lenovo Thinkpad)
     apt: name=tpb state=present
-    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+    when: ansible_distribution == 'Debian' and thinkpad
 
   - name: Enable Screen brightness control (Lenovo Thinkpad)
     lineinfile: dest=/etc/default/grub line='GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor"'
     register: grub_update
-    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+    when: ansible_distribution == 'Debian' and thinkpad
   - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
     shell: update-grub
-    become: true
-    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad') and grub_update|succeeded
+    become: True
+    when: ansible_distribution == 'Debian' and thinkpad and grub_update|succeeded
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
-    when: ansible_distribution == 'Debian' and lsusb.stdout.find('thinkpad')
+    when: ansible_distribution == 'Debian' and thinkpad
 
   - name: Check Bash-It is installed
     shell: bash -lc bash-it
