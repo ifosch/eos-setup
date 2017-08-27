@@ -90,7 +90,7 @@
   - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
     shell: update-grub
     become: True
-    when: ansible_distribution == 'Debian' and thinkpad and grub_update|succeeded
+    when: ansible_distribution == 'Debian' and thinkpad and not grub_update|failed
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
