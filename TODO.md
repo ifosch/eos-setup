@@ -1,6 +1,5 @@
 # Add to setup.yml when machine is big enough:
 
-  - [Packer](https://www.packer.io)
   - [Dropbox CLI](https://github.com/dropbox/dbxcli)
   - [Steam](https://steamcdn-a.akamaihd.net/client/installer/steam.deb)
   - [Docker Machine](https://docs.docker.com/machine/install-machine)

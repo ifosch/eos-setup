@@ -29,6 +29,7 @@ With this playbook I setup the following in my setup:
   - LibreOffice :white_check_mark:
   - [NVM](https://github.com/creationix/nvm.git) :white_check_mark:
   - OpenJDK Java JRE 8 :white_check_mark:
+  - [Packer](https://www.packer.io) :white_check_mark:
   - Pidgin :white_check_mark:
   - Pwgen :white_check_mark:
   - Remmina (RDP client) :white_check_mark:
