@@ -536,7 +536,12 @@
     ignore_errors: True
   - name: Download Vagrant deb package
     get_url: url=https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb dest=/tmp/vagrant.deb
+    register: vagrant_download
+    ignore_errors: True
     when: vagrant_installed|failed
+  - name: Get Vagrant deb package
+    shell: curl https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb > /tmp/vagrant.deb
+    when: vagrant_download|failed
   - name: Install Vagrant
     apt: deb=/tmp/vagrant.deb
     when: vagrant_installed|failed
