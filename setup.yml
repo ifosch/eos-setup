@@ -516,7 +516,12 @@
     ignore_errors: True
   - name: Download Keybase deb package
     get_url: url=https://prerelease.keybase.io/keybase_amd64.deb dest=/tmp/keybase.deb
+    register: keybase_download
+    ignore_errors: True
     when: keybase_installed|failed
+  - name: Get Keybase deb package
+    shell: curl https://prerelease.keybase.io/keybase_amd64.deb > /tmp/keybase.deb
+    when: keybase_download|failed
   - name: Install Keybase
     apt: deb=/tmp/keybase.deb
     when: keybase_installed|failed
