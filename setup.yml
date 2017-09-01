@@ -66,6 +66,7 @@
   - name: Detect USB devices
     shell: lsusb
     register: lsusb
+    ignore_errors: True
 
   - name: Set as Lenovo Thinkpad T430s
     set_fact: thinkpad=yes
