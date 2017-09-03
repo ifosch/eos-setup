@@ -20,6 +20,9 @@
       - { server: 'pgp.mit.edu', id: '5044912E' }
       - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
+  - name: Add Jurisic apt repository keys (for Remmina)
+    apt_key: url="http://apt.jurisic.org/Release.key"
+
   - name: Add Docker apt repository keys
     apt_key: url="https://download.docker.com/linux/debian/gpg" id='0EBFCD88'
     register: docker_keys
@@ -42,6 +45,7 @@
       - 'deb [arch=amd64] https://download.docker.com/linux/debian stretch stable'
       - 'deb http://download.virtualbox.org/virtualbox/debian stretch contrib'
       - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
+      - 'deb http://apt.jurisic.org/debian/ stretch main contrib non-free'
 
   - name: Add apt repositories (non-Debian)
     apt_repository: repo='{{ item }}'
