@@ -1,0 +1,26 @@
+---
+# tasks file for google-chrome
+
+  - name: Check Chrome is installed
+    shell: which google-chrome
+    register: chrome_installed
+    ignore_errors: yes
+  - name: Download Chrome package
+    get_url:
+      url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      dest: /tmp/chrome.deb
+    when: chrome_installed|failed
+  - name: Install Chrome
+    apt:
+      deb: /tmp/chrome.deb
+    when: chrome_installed|failed
+  - name: Setup Chrome alias
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'alias chrome=google-chrome'
+    when: chrome_installed|failed
+  - name: Remove Chrome package
+    file:
+      path: /tmp/chrome.deb
+      state: absent
+    when: chrome_installed|failed

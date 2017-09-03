@@ -6,6 +6,7 @@
   roles:
     - bash-it
     - docker
+    - google-chrome
     - keybase
     - nvm
     - packer
@@ -105,22 +106,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Check Chrome is installed
-    shell: which google-chrome
-    become_user: '{{ user }}'
-    register: result
-    ignore_errors: True
-  - name: Download Chrome package
-    get_url: url=https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb dest=/tmp/chrome.deb
-    when: result|failed
-  - name: Install Chrome
-    apt: deb=/tmp/chrome.deb
-    when: result|failed
-  - name: Setup Chrome alias
-    lineinfile: dest=/home/{{ user }}/.bashrc line='alias chrome=google-chrome'
-  - name: Remove Chrome package
-    file: path=/tmp/chrome.deb state=absent
 
   - name: Check Go is installed
     shell: ls /usr/local/go/bin/go
