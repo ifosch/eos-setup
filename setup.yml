@@ -12,6 +12,7 @@
     - powerline-font
     - remmina
     - spacemacs
+    - telegram
     - vagrant
   tasks:
   - name: Install requirements for APT (Debian)
@@ -104,29 +105,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Check Telegram is installed
-    shell: which telegram
-    become_user: '{{ user }}'
-    register: result
-    ignore_errors: True
-  - name: Download Telegram package
-    get_url: url=https://tdesktop.com/linux dest=/tmp/telegram.tar.xz
-    when: result|failed
-  - name: Unpack Telegram
-    shell: tar -xJf /tmp/telegram.tar.xz chdir=/opt creates=/opt/Telegram
-    when: result|failed
-  - name: Install Telegram
-    shell: ln -s /opt/Telegram/Telegram /usr/bin/telegram creates=/usr/bin/telegram
-    when: result|failed
-  - name: Setup Telegram Desktop icon
-    copy: src=files/telegram.png dest=/usr/share/icons/hicolor/128x128/apps/telegram.png
-    when: result|failed
-  - name: Setup Telegram Desktop info
-    template: src=templates/telegram.desktop.j2 dest=/usr/share/applications/telegram.desktop
-    when: result|failed
-  - name: Remove Telegram package
-    file: path=/tmp/telegram.tar.xz state=absent
 
   - name: Check Chrome is installed
     shell: which google-chrome

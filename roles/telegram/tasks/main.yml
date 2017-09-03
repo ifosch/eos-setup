@@ -1,0 +1,38 @@
+---
+# tasks file for telegram
+
+  - name: Check Telegram is installed
+    shell: which telegram
+    register: telegram_installed
+    ignore_errors: yes
+  - name: Download Telegram package
+    get_url:
+      url: https://tdesktop.com/linux
+      dest: /tmp/telegram.tar.xz
+    when: telegram_installed|failed
+  - name: Unpack Telegram
+    shell: tar -xJf /tmp/telegram.tar.xz
+    args:
+      chdir: /opt
+      creates: /opt/Telegram
+    when: telegram_installed|failed
+  - name: Install Telegram
+    shell: ln -s /opt/Telegram/Telegram /usr/local/bin/telegram
+    args:
+      creates: /usr/bin/telegram
+    when: telegram_installed|failed
+  - name: Setup Telegram Desktop icon
+    copy:
+      src: files/telegram.png
+      dest: /usr/share/icons/hicolor/128x128/apps/telegram.png
+    when: telegram_installed|failed
+  - name: Setup Telegram Desktop info
+    template:
+      src: templates/telegram.desktop.j2
+      dest: /usr/share/applications/telegram.desktop
+    when: telegram_installed|failed
+  - name: Remove Telegram package
+    file:
+      path: /tmp/telegram.tar.xz
+      state: absent
+    when: telegram_installed|failed
