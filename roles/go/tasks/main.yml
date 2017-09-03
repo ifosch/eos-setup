@@ -1,0 +1,34 @@
+---
+# tasks file for go
+
+  - name: Check Go is installed
+    shell: ls /usr/local/go/bin/go
+    become_user: '{{ user }}'
+    register: chrome_installed
+    ignore_errors: True
+  - name: Download Go package
+    get_url:
+      url: https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz
+      dest: /tmp/go.tgz
+    when: chrome_installed|failed
+  - name: Unpack Go
+    shell: tar -xzf /tmp/go.tgz
+    args:
+      chdir: /opt
+      creates: /opt/go
+    when: chrome_installed|failed
+  - name: Install Go
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'export PATH=$PATH:/opt/go/bin'
+    when: chrome_installed|failed
+  - name: Setup Go
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'export GOPATH=$HOME'
+    when: chrome_installed|failed
+  - name: Remove Go package
+    file:
+      path: /tmp/go.tgz
+      state: absent
+    when: chrome_installed|failed
