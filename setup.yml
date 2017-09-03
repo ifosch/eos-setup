@@ -5,6 +5,7 @@
     mba11: no
   roles:
     - bash-it
+    - common
     - conda
     - docker
     - dropbox
