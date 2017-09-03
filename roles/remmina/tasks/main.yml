@@ -1,0 +1,24 @@
+---
+# tasks file for remmina
+
+  - name: Add Jurisic apt repository keys (for Remmina)
+    apt_key:
+      url: "http://apt.jurisic.org/Release.key"
+    when: ansible_distribution == 'Debian'
+  - name: Add apt repositories (Debian)
+    apt_repository:
+      repo: '{{ item }}'
+    when: ansible_distribution == 'Debian'
+    with_items:
+      - "deb http://apt.jurisic.org/debian/ stretch main contrib non-free"
+
+  - name: Install apt packages
+    apt:
+      name: {{ item }}
+      update_cache: yes
+    when:
+      - ansible_distribution == "Debian"
+    with_items:
+      - remmina
+      - remmina-plugin-rdp
+      - remmina-plugin-vnc
