@@ -7,6 +7,7 @@
     - keybase
     - nvm
     - packer
+    - powerline-font
     - spacemacs
     - vagrant
   tasks:
@@ -367,38 +368,6 @@
   - name: Install Caffeine
     apt: name=caffeine state=present
     when: ansible_distribution == 'Debian'
-
-  - name: Configure MS TTF Core Fonts EULA to accepted
-    debconf:
-     name: ttf-mscorefonts-installer
-     question: msttcorefonts/accepted-mscorefonts-eula
-     value: true
-     vtype: select
-
-  - name: Check Powerline font is required
-    shell: ls /home/{{ user }}/.fonts/PowerlineSymbols.otf
-    register: font_installed
-    ignore_errors: True
-  - name: Make font dir
-    file: path=/home/{{ user }}/.fonts state=directory mode=0755
-    become_user: '{{ user }}'
-    when: font_installed|failed
-  - name: Download Powerline font
-    get_url: url=https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf dest=/home/{{ user }}/.fonts
-    become_user: '{{ user }}'
-    when: font_installed|failed
-  - name: Make fontconfig dir
-    file: path=/home/{{ user }}/.config/fontconfig/conf.d state=directory mode=0755
-    become_user: '{{ user }}'
-    when: font_installed|failed
-  - name: Download Powerline fontconfig file
-    get_url: url=https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf dest=/home/{{ user }}/.config/fontconfig/conf.d
-    become_user: '{{ user }}'
-    when: font_installed|failed
-  - name: Update font cache
-    shell: fc-cache -vf /home/{{ user }}/.fonts
-    become_user: '{{ user }}'
-    when: font_installed|failed
 
   - name: Install pip packages
     pip: name={{ item }}
