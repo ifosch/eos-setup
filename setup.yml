@@ -324,7 +324,7 @@
     register: result
     ignore_errors: True
   - name: Setup RVM keyserver
-    shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+    shell: gpg --keyserver hkp://pgp.mit.edu --recv-keys D39DC0E3
     when: result|failed
   - name: Download RVM installer
     get_url: url=https://get.rvm.io dest=/tmp/rvm.sh
