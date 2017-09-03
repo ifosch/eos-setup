@@ -1,0 +1,24 @@
+---
+# tasks file for hub
+
+  - name: Check Hub is installed
+    shell: ls /home/{{ user }}/bin/hub
+    become_user: '{{ user }}'
+    register: hub_installed
+    ignore_errors: yes
+  - name: Install Hub
+    shell: GOPATH=/home/{{ user }} /opt/go/bin/go get github.com/github/hub
+    args:
+      creates: /home/{{ user }}/bin/hub
+    become_user: '{{ user }}'
+    when: hub_installed|failed
+  - name: Setup Hub
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'export PATH=$PATH:/home/{{ user }}/bin'
+    when: hub_installed|failed
+  - name: Replace Git with Hub
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'alias git=hub'
+    when: hub_installed|failed

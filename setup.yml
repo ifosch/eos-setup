@@ -8,6 +8,7 @@
     - docker
     - google-chrome
     - go
+    - hub
     - keybase
     - nvm
     - packer
@@ -107,20 +108,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Check Hub is installed
-    shell: ls /home/{{ user }}/bin/hub
-    become_user: '{{ user }}'
-    register: result
-    ignore_errors: True
-  - name: Install Hub
-    shell: GOPATH=/home/{{ user }} /usr/local/go/bin/go get github.com/github/hub creates=/home/{{ user }}/bin/hub
-    become_user: '{{ user }}'
-    when: result|failed
-  - name: Setup Hub
-    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/bin'
-  - name: Replace Git with Hub
-    lineinfile: dest=/home/{{ user }}/.bashrc line='alias git=hub'
 
   - name: Check Heroku Toolbelt is installed
     shell:  which heroku && heroku
