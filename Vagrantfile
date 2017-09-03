@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
 
       # Customize the amount of memory on the VM:
       vb.memory = '4096'
-      v.customize ["modifyvm", :id, "--vram", "32"]
+      vb.customize ["modifyvm", :id, "--vram", "32"]
     end
     debian.vm.provision 'shell', inline: <<-SHELL
       which sudo || \
