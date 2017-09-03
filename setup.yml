@@ -17,6 +17,7 @@
     - packer
     - powerline-font
     - remmina
+    - rvm
     - spacemacs
     - telegram
     - vagrant
@@ -111,28 +112,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Check RVM is installed
-    shell: bash -lc "rvm"
-    become_user: '{{ user }}'
-    register: result
-    ignore_errors: True
-  - name: Setup RVM keyserver
-    shell: gpg --keyserver hkp://pgp.mit.edu --recv-keys D39DC0E3
-    when: result|failed
-  - name: Download RVM installer
-    get_url: url=https://get.rvm.io dest=/tmp/rvm.sh
-    when: result|failed
-  - name: Install cURL
-    apt: name=curl
-    when: ansible_distribution == 'Debian'
-  - name: Install RVM
-    shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
-    when: result|failed
-  - name: Setup RVM in session
-    lineinfile: dest=/home/{{ user }}/.bashrc line='. /etc/profile.d/rvm.sh'
-  - name: Setup PATH for RVM
-    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
 
   - name: Install thefuck requirements
     apt: name=python-dev
