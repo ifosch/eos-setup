@@ -8,8 +8,8 @@
     - conda
     - docker
     - dropbox
-    - google-chrome
     - go
+    - google-chrome
     - heroku-cli
     - hub
     - keybase
@@ -23,12 +23,6 @@
     - telegram
     - vagrant
   tasks:
-  - name: Install requirements for APT (Debian)
-    apt: name={{ item }} state=present
-    when: ansible_distribution == 'Debian'
-    with_items:
-     - apt-transport-https
-     - software-properties-common
 
   - name: Add apt repositories keys (Common)
     apt_key: keyserver={{ item.server }} id={{ item.id }}

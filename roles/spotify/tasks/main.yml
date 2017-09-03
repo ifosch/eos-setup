@@ -3,23 +3,23 @@
 
   - name: Add apt repositories keys (Common)
     apt_key:
-      keyserver: {{ item.server }}
-      id: {{ item.id }}
+      keyserver: "{{ item.server }}"
+      id: "{{ item.id }}"
     with_items:
       - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
   - name: Add apt repositories (Debian)
     apt_repository:
-      repo: '{{ item }}'
-    when: ansible_distribution == 'Debian'
+      repo: "{{ item }}"
+    when: ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
 
   - name: Add apt repositories (non-Debian)
     apt_repository:
-      repo: '{{ item }}'
-    when: ansible_distribution != 'Debian'
+      repo: "{{ item }}"
+    when: ansible_distribution != "Debian"
     register: new_non_deb_apt_repos_added
     with_items:
       - 'deb http://repository.spotify.com stable non-free'
@@ -36,11 +36,11 @@
     ignore_errors: yes
   - name: Install LibSSL1.0 from Jessie
     apt:
-      deb; "http://ftp.es.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb"
+      deb: "http://ftp.es.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb"
     when: libssl_installed|failed
 
   - name: Install apt packages
     apt:
-      name: {{ item }}
+      name: "{{ item }}"
     with_items:
       - spotify-client

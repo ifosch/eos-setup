@@ -7,7 +7,7 @@
     register: hub_installed
     ignore_errors: yes
   - name: Install Hub
-    shell: GOPATH=/home/{{ user }} /opt/go/bin/go get github.com/github/hub
+    shell: GOPATH=/home/{{ user }} /usr/local/go/bin/go get github.com/github/hub
     args:
       creates: /home/{{ user }}/bin/hub
     become_user: '{{ user }}'

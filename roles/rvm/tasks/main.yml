@@ -16,7 +16,7 @@
     when: rvm_installed|failed
   - name: Install cURL
     apt:
-      name; curl
+      name: curl
     when: ansible_distribution == 'Debian'
   - name: Install RVM
     shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5

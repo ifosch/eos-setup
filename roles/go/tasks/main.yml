@@ -14,13 +14,13 @@
   - name: Unpack Go
     shell: tar -xzf /tmp/go.tgz
     args:
-      chdir: /opt
-      creates: /opt/go
+      chdir: /usr/local
+      creates: /usr/local/go
     when: chrome_installed|failed
   - name: Install Go
     lineinfile:
       dest: /home/{{ user }}/.bashrc
-      line: 'export PATH=$PATH:/opt/go/bin'
+      line: 'export PATH=$PATH:/usr/local/go/bin'
     when: chrome_installed|failed
   - name: Setup Go
     lineinfile:

@@ -3,24 +3,24 @@
 
   - name: Check Bash-It is installed
     shell: bash -lc bash-it
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     register: result
     ignore_errors: yes
   - name: Clone Bash-It into home
     git:
       repo: http://github.com/Bash-it/bash-it.git
       dest: /home/{{ user }}/.bash_it
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     when: result|failed
   - name: Setup Bash-It
     template:
       src: templates/bashrc.j2
       dest: /home/{{ user }}/.bashrc
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     when: result|failed
   - name: Enable Bash-It aliases
     shell: bash -lc "bash-it enable alias {{ item }}"
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     when: result|failed
     with_items:
       - ansible
@@ -36,7 +36,7 @@
       - vim
   - name: Enable Bash-It completions
     shell: bash -lc "bash-it enable completion {{ item }}"
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     when: result|failed
     with_items:
       - bash-it
@@ -54,7 +54,7 @@
       - virtualbox
   - name: Enable Bash-It plugins
     shell: bash -lc "bash-it enable plugin {{ item }}"
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     when: result|failed
     with_items:
       - aws
