@@ -1,0 +1,77 @@
+---
+# tasks file for bash-it
+
+  - name: Check Bash-It is installed
+    shell: bash -lc bash-it
+    become_user: '{{ user }}'
+    register: result
+    ignore_errors: yes
+  - name: Clone Bash-It into home
+    git:
+      repo: http://github.com/Bash-it/bash-it.git
+      dest: /home/{{ user }}/.bash_it
+    become_user: '{{ user }}'
+    when: result|failed
+  - name: Setup Bash-It
+    template:
+      src: templates/bashrc.j2
+      dest: /home/{{ user }}/.bashrc
+    become_user: '{{ user }}'
+    when: result|failed
+  - name: Enable Bash-It aliases
+    shell: bash -lc "bash-it enable alias {{ item }}"
+    become_user: '{{ user }}'
+    when: result|failed
+    with_items:
+      - ansible
+      - bundler
+      - clipboard
+      - docker
+      - fuck
+      - general
+      - git
+      - heroku
+      - hg
+      - vagrant
+      - vim
+  - name: Enable Bash-It completions
+    shell: bash -lc "bash-it enable completion {{ item }}"
+    become_user: '{{ user }}'
+    when: result|failed
+    with_items:
+      - bash-it
+      - conda
+      - defaults
+      - dirs
+      - django
+      - fabric-completion
+      - gem
+      - git
+      - npm
+      - ssh
+      - test_kitchen
+      - vagrant
+      - virtualbox
+  - name: Enable Bash-It plugins
+    shell: bash -lc "bash-it enable plugin {{ item }}"
+    become_user: '{{ user }}'
+    when: result|failed
+    with_items:
+      - aws
+      - base
+      - battery
+      - browser
+      - dirs
+      - docker
+      - extract
+      - gif
+      - git
+      - hg
+      - java
+      - javascript
+      - node
+      - nvm
+      - python
+      - ruby
+      - rvm
+      - ssh
