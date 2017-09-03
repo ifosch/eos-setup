@@ -452,6 +452,7 @@
       - htop
       - ipcalc
       - keepassx
+      - pandoc
       - pidgin
       - pidgin-guifications
       - pidgin-hotkeys
