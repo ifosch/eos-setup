@@ -5,6 +5,7 @@
     mba11: no
   roles:
     - bash-it
+    - docker
     - keybase
     - nvm
     - packer
@@ -29,15 +30,6 @@
       - { server: 'pgp.mit.edu', id: '5044912E' }
       - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
-  - name: Add Docker apt repository keys
-    apt_key: url="https://download.docker.com/linux/debian/gpg" id='0EBFCD88'
-    register: docker_keys
-    ignore_errors: True
-  - name: Get Docker apt repository keys
-    shell: curl https://download.docker.com/linux/debian/gpg | apt-key add -
-    become: True
-    when: docker_keys|failed
-
   - name: Add VirtualBox apt repository keys
     apt_key: url="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
 
@@ -48,7 +40,6 @@
     with_items:
       - 'deb http://http.debian.net/debian stretch main contrib non-free'
       - 'deb http://repository.spotify.com stable non-free'
-      - 'deb [arch=amd64] https://download.docker.com/linux/debian stretch stable'
       - 'deb http://download.virtualbox.org/virtualbox/debian stretch contrib'
       - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
 
@@ -299,7 +290,6 @@
   - name: Install pip packages
     pip: name={{ item }}
     with_items:
-      - docker-compose
       - psutil
       - thefuck
 
@@ -325,7 +315,6 @@
       - awesome-extra
       - calibre
       - dhcpcd5
-      - docker-ce
       - gimp
       - gimp-data-extras
       - gimp-dcraw
