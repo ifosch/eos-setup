@@ -1,0 +1,26 @@
+---
+# tasks file for heroku-cli
+
+  - name: Check Heroku Toolbelt is installed
+    shell:  which heroku && heroku
+    become_user: '{{ user }}'
+    register: heroku_installed
+    ignore_errors: yes
+  - name: Download Heroku Toolbelt installer
+    get_url:
+      url: https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz
+      dest: /tmp/heroku.tar.gz
+    register: heroku_download
+    ignore_errors: yes
+    when: heroku_installed|failed
+  - name: Get Heroku Installer
+    shell: curl https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz > /tmp/heroku.tar.gz
+    when: heroku_download|failed
+  - name: Unarchive Heroku Installer
+    unarchive:
+      src: /tmp/heroku.tar.gz
+      dest: /usr/local/lib
+    when: heroku_installed|failed
+  - name: Install Heroku
+    shell: /usr/local/lib/heroku/install
+    when: heroku_installed|failed
