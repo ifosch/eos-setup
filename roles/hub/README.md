@@ -1,6 +1,6 @@
 # `hub` Role
 
-A brief description of the role goes here.
+This role installs Hub.
 
 ## Requirements
 

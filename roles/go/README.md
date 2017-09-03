@@ -1,6 +1,6 @@
 # `go` Role
 
-A brief description of the role goes here.
+This role installs the Go language
 
 ## Requirements
 
