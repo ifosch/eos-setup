@@ -1,0 +1,27 @@
+---
+# tasks file for conda
+
+  - name: Check Miniconda is installed
+    shell: ls /home/{{ user }}/.miniconda
+    become_user: '{{ user }}'
+    register: miniconda_installed
+    ignore_errors: yes
+  - name: Download Miniconda installer
+    get_url:
+      url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+      dest: /tmp/Miniconda.sh
+    when: miniconda_installed|failed
+  - name: Install Miniconda
+    shell: bash -lc "bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda"
+    become_user: '{{ user }}'
+    when: miniconda_installed|failed
+  - name: Setup Conda
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: 'export PATH=$PATH:/home/{{ user }}/.miniconda/bin'
+    when: miniconda_installed|failed
+  - name: Remove Miniconda installer
+    file:
+      path: /tmp/Miniconda.sh
+      state: absent
+    when: miniconda_installed|failed

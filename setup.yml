@@ -5,6 +5,7 @@
     mba11: no
   roles:
     - bash-it
+    - conda
     - docker
     - dropbox
     - google-chrome
@@ -110,24 +111,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Check Miniconda is installed
-    shell: ls /home/{{ user }}/.miniconda
-    become_user: '{{ user }}'
-    register: result
-    ignore_errors: True
-  - name: Download Miniconda installer
-    get_url: url=https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh dest=/tmp/Miniconda.sh
-    when: result|failed
-  - name: Install Miniconda
-    shell: bash -lc "bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda"
-    become_user: '{{ user }}'
-    when: result|failed
-  - name: Setup Conda
-    lineinfile: dest=/home/{{ user }}/.bashrc line='export PATH=$PATH:/home/{{ user }}/.miniconda/bin'
-    when: result|failed
-  - name: Remove Miniconda installer
-    file: path=/tmp/Miniconda.sh state=absent
 
   - name: Check RVM is installed
     shell: bash -lc "rvm"
