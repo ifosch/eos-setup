@@ -4,6 +4,7 @@
     thinkpad: no
     mba11: no
   roles:
+    - keybase
     - packer
     - vagrant
   tasks:
@@ -532,23 +533,3 @@
               [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"
     become_user: '{{ user }}'
     when: nvm_installed|failed
-
-  - name: Check Keybase is installed
-    shell: bash -lc keybase
-    become_user: '{{ user }}'
-    register: keybase_installed
-    ignore_errors: True
-  - name: Download Keybase deb package
-    get_url: url=https://prerelease.keybase.io/keybase_amd64.deb dest=/tmp/keybase.deb
-    register: keybase_download
-    ignore_errors: True
-    when: keybase_installed|failed
-  - name: Get Keybase deb package
-    shell: curl https://prerelease.keybase.io/keybase_amd64.deb > /tmp/keybase.deb
-    when: keybase_download|failed
-  - name: Install Keybase
-    apt: deb=/tmp/keybase.deb
-    when: keybase_installed|failed
-  - name: Remove Keybase deb package
-    file: path=/tmp/keybase.deb state=absent
-    when: keybase_installed|failed

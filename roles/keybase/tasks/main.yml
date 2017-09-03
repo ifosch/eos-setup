@@ -1,0 +1,27 @@
+---
+# tasks file for keybase
+
+  - name: Check Keybase is installed
+    shell: bash -lc keybase
+    register: keybase_installed
+    ignore_errors: yes
+  - name: Download Keybase deb package
+    get_url:
+      url: https://prerelease.keybase.io/keybase_amd64.deb
+      dest: /tmp/keybase.deb
+    register: keybase_download
+    ignore_errors: yes
+    when: keybase_installed|failed
+  - name: Get Keybase deb package
+    shell: curl https://prerelease.keybase.io/keybase_amd64.deb > /tmp/keybase.deb
+    when: keybase_download|failed
+  - name: Install Keybase
+    apt:
+      deb: /tmp/keybase.deb
+      state: present
+    when: keybase_installed|failed
+  - name: Remove Keybase deb package
+    file:
+      path: /tmp/keybase.deb
+      state: absent
+    when: keybase_installed|failed
