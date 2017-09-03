@@ -6,7 +6,7 @@
       keyserver: "{{ item.server }}"
       id: "{{ item.id }}"
     with_items:
-      - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
+      - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
 
   - name: Add apt repositories (Debian)
     apt_repository:

@@ -2,7 +2,7 @@
 # tasks file for dropbox
 
   - name: Check Dropbox is installed
-    shell: ls /home/{{ user }}/Dropbox
+    shell: ls /home/{{ user }}/.dropbox
     become_user: '{{ user }}'
     register: dropbox_installed
     ignore_errors: True

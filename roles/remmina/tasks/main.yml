@@ -8,14 +8,18 @@
   - name: Add apt repositories (Debian)
     apt_repository:
       repo: "{{ item }}"
+    register: new_apt_repos_added
     when: ansible_distribution == 'Debian'
     with_items:
       - "deb http://apt.jurisic.org/debian/ stretch main contrib non-free"
+  - name: Update apt caches (Forced)
+    apt: update_cache=yes
+    when:
+      - new_apt_repos_added|changed
 
   - name: Install apt packages
     apt:
       name: "{{ item }}"
-      update_cache: yes
     when:
       - ansible_distribution == "Debian"
     with_items:
