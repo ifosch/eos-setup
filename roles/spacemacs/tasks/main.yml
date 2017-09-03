@@ -1,0 +1,58 @@
+---
+# tasks file for spacemacs
+
+  - name: Check Emacs installed
+    shell: dpkg -l emacs
+    register: emacs_installed
+    ignore_errors: yes
+  - name: Check libgnutls30 version
+    shell: dpkg -l libgnutls30 | grep 3.5.8-5+deb9u2
+    register: libgnutls_version
+    ignore_errors: yes
+    when: emacs_installed|failed
+  - name: Ensure libgnutls30 version
+    apt:
+      name: libgnutls30=3.5.8-5+deb9u2
+      force: yes
+      dpkg_options: force-downgrade
+    when: emacs_installed|failed and libgnutls_version|failed
+
+  - name: Install apt packages
+    apt: name={{ item }}
+    with_items:
+      - emacs
+      - pandoc
+
+  - name: Check Spacemacs installed
+    shell: ls /home/{{ user }}/.emacs.d/spacemacs.mk
+    ignore_errors: yes
+    register: spacemacs_installed
+  - name: Remove Emacs config file
+    file:
+      path: /home/{{ user }}/.emacs
+      state: absent
+    when: spacemacs_installed|failed
+  - name: Remove Emacs config dir
+    file:
+      path: /home/{{ user }}/.emacs.d
+      state: absent
+    when: spacemacs_installed|failed
+  - name: Clone Spacemacs
+    git:
+      repo: http://github.com/syl20bnr/spacemacs
+      dest: /home/{{ user }}/.emacs.d
+    become_user: '{{ user }}'
+    when: spacemacs_installed|failed
+  - name: Install Source Code Pro font
+    git:
+      repo: https://github.com/adobe-fonts/source-code-pro
+      version: release
+      depth: 1
+      dest: /home/{{ user }}/.fonts/adobe-source-code-pro
+    become_user: '{{ user }}'
+    register: source_code_pro_installed
+    when: spacemacs_installed|failed
+  - name: Update font cache
+    shell: fc-cache -vf /home/{{ user }}/.fonts/adobe-source-code-pro
+    become_user: '{{ user }}'
+    when: not source_code_pro_installed|failed
