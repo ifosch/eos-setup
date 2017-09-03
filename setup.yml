@@ -409,7 +409,7 @@
       - unetbootin
 
   - name: Check LibSSL install
-    shell: dpkg -l | grep libssl
+    shell: dpkg -l | grep libssl1.0.0
     register: libssl_installed
     ignore_errors: True
   - name: Install LibSSL1.0 from Jessie
