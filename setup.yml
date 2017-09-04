@@ -23,6 +23,7 @@
     - spotify
     - telegram
     - vagrant
+    - virtualbox
   tasks:
 
   - name: Add apt repositories keys (Common)
@@ -33,16 +34,12 @@
       - { server: 'pgp.mit.edu', id: '5044912E' }
       - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
-  - name: Add VirtualBox apt repository keys
-    apt_key: url="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
-
   - name: Add apt repositories (Debian)
     apt_repository: repo='{{ item }}'
     when: ansible_distribution == 'Debian'
     register: new_apt_repos_added
     with_items:
       - 'deb http://http.debian.net/debian stretch main contrib non-free'
-      - 'deb http://download.virtualbox.org/virtualbox/debian stretch contrib'
       - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
 
   - name: Add apt repositories (non-Debian)
@@ -170,7 +167,6 @@
       - pwgen
       - scudcloud
       - terminator
-      - virtualbox-5.1
       - vlc
       - wpasupplicant
       - xbacklight
