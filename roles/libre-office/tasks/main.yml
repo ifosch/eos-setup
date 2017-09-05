@@ -1,0 +1,14 @@
+---
+# tasks file for libre-office
+
+  - name: Install LibreOffice
+    apt: name={{ item }}
+    with_items:
+      - fonts-opensymbol
+      - hyphen-ca
+      - hyphen-en-us
+      - libreoffice
+      - myspell-ca
+      - myspell-es
+      - mythes-ca
+      - mythes-en-us

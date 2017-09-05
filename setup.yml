@@ -14,6 +14,7 @@
     - heroku-cli
     - hub
     - keybase
+    - libre-office
     - nvm
     - packer
     - powerline-font
@@ -105,18 +106,6 @@
 
   - name: Install thefuck requirements
     apt: name=python-dev
-
-  - name: Install LibreOffice
-    apt: name={{ item }}
-    with_items:
-      - fonts-opensymbol
-      - hyphen-ca
-      - hyphen-en-us
-      - libreoffice
-      - myspell-ca
-      - myspell-es
-      - mythes-ca
-      - mythes-en-us
 
   - name: Install Caffeine Plus
     apt: name=caffeine-plus state=present
