@@ -12,10 +12,17 @@
     when: ansible_distribution == 'Debian'
     with_items:
       - "deb http://apt.jurisic.org/debian/ stretch main contrib non-free"
+  - name: Add apt repositories (non-Debian)
+    apt_repository:
+      repo: '{{ item }}'
+    when: ansible_distribution != 'Debian'
+    register: new_non_deb_apt_repos_added
+    with_items:
+      - 'ppa:remmina-ppa-team/remmina-next'
   - name: Update apt caches (Forced)
     apt: update_cache=yes
     when:
-      - new_apt_repos_added|changed
+      - new_apt_repos_added|changed or new_non_deb_apt_repos_added|changed
 
   - name: Install apt packages
     apt:

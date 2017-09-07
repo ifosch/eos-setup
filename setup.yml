@@ -49,7 +49,6 @@
     register: new_non_deb_apt_repos_added
     with_items:
       - 'ppa:nilarimogard/webupd8'
-      - 'ppa:remmina-ppa-team/remmina-next'
       - 'ppa:zeal-developers/ppa'
       - 'ppa:rael-gc/scudcloud'
 
