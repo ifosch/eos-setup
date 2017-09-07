@@ -1,0 +1,31 @@
+---
+# tasks file for slack
+
+  - name: Check is Slack is installed
+    shell: which slack
+    register: slack_installed
+    ignore_errors: yes
+  - name: Download Slack package
+    get_url:
+      url: "https://downloads.slack-edge.com/linux_releases/slack-desktop-2.7.1-amd64.deb"
+      dest: /tmp/slack.deb
+    register: slack_download
+    ignore_errors: yes
+    when:
+      - slack_installed|failed
+  - name: Get Slack package
+    shell: curl https://downloads.slack-edge.com/linux_releases/slack-desktop-2.7.1-amd64.deb > /tmp/slack.deb
+    when:
+      - slack_download|failed
+  - name: Install apt packages
+    apt:
+      deb: /tmp/slack.deb
+      state: present
+    when:
+      - slack_installed|failed
+  - name: Remove Slack package
+    file:
+      path: /tmp/slack.deb
+      state: absent
+    when:
+      - slack_installed|failed

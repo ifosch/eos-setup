@@ -20,6 +20,7 @@
     - powerline-font
     - remmina
     - rvm
+    - slack
     - spacemacs
     - spotify
     - telegram
@@ -33,7 +34,6 @@
       - { server: 'keys.gnupg.net', id: '6BF18B15' }
       - { server: 'keyserver.ubuntu.com', id: '8231B6DD' }
       - { server: 'pgp.mit.edu', id: '5044912E' }
-      - { server: 'ha.pool.sks-keyservers.net', id: 'F4E3FBBE' }
 
   - name: Add apt repositories (Debian)
     apt_repository: repo='{{ item }}'
@@ -41,7 +41,6 @@
     register: new_apt_repos_added
     with_items:
       - 'deb http://http.debian.net/debian stretch main contrib non-free'
-      - 'deb http://ppa.launchpad.net/rael-gc/scudcloud/ubuntu xenial main'
 
   - name: Add apt repositories (non-Debian)
     apt_repository: repo='{{ item }}'
@@ -50,7 +49,6 @@
     with_items:
       - 'ppa:nilarimogard/webupd8'
       - 'ppa:zeal-developers/ppa'
-      - 'ppa:rael-gc/scudcloud'
 
   - name: Update apt caches
     apt: update_cache=yes cache_valid_time=86400
@@ -153,7 +151,6 @@
       - pidgin-themes
       - python-argcomplete
       - pwgen
-      - scudcloud
       - terminator
       - vlc
       - wpasupplicant
