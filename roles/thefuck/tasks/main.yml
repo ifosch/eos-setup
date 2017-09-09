@@ -1,0 +1,11 @@
+---
+# tasks file for thefuck
+
+  - name: Install thefuck requirements
+    apt:
+      name: python-dev
+  - name: Install pip packages
+    pip:
+      name: "{{ item }}"
+    with_items:
+      - thefuck

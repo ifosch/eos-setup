@@ -25,6 +25,7 @@
     - spacemacs
     - spotify
     - telegram
+    - thefuck
     - vagrant
     - virtualbox
   tasks:
@@ -102,9 +103,6 @@
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
 
-  - name: Install thefuck requirements
-    apt: name=python-dev
-
   - name: Install Caffeine Plus
     apt: name=caffeine-plus state=present
     when: ansible_distribution != 'Debian'
@@ -116,7 +114,6 @@
     pip: name={{ item }}
     with_items:
       - psutil
-      - thefuck
 
   - name: Install apt packages
     apt: name={{ item }}
