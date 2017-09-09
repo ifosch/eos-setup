@@ -22,9 +22,12 @@ Not needed anymore, so unlikely to add:
 
 # Find configuration tweaks for:
 
+  - Make the Vagrantfile to check for /var/lib/apt/lists/lock before starting.
+  - Setup battery notifications.
+  - Use nmcli to setup WiFi.
+  - System detection: Run update-pciids before lspci. And update-usbids before lsusb.
   - System setup: Dock hiding, Multitouch single tip for click, keyboard layouts
   - [Dropbox](http://www.ubuntizando.com/2015/05/26/dropbox-elementary-os-freya/) *AUTH Data*
-  - Caffeine
   - Telegram setup *AUTH Data*
   - Heroku-toolbelt *AUTH Data*
   - Piding *AUTH Data*

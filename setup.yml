@@ -4,8 +4,9 @@
     thinkpad: no
     mba11: no
   roles:
-    - bash-it
     - common
+    - bash-it
+    - calibre
     - conda
     - docker
     - dropbox
@@ -129,7 +130,7 @@
     with_items:
       - awesome
       - awesome-extra
-      - calibre
+      - bash-completion
       - dhcpcd5
       - gimp
       - gimp-data-extras

@@ -49,6 +49,7 @@
       - git
       - npm
       - ssh
+      - system
       - test_kitchen
       - vagrant
       - virtualbox
@@ -57,6 +58,7 @@
     become_user: "{{ user }}"
     when: result|failed
     with_items:
+      - alias-completion
       - aws
       - base
       - battery
