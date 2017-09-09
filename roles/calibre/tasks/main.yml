@@ -1,0 +1,8 @@
+---
+# tasks file for calibre
+
+  - name: Install apt packages
+    apt:
+      name: "{{ item }}"
+    with_items:
+      - calibre
