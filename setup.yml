@@ -5,6 +5,7 @@
     mba11: no
   roles:
     - common
+    - awesome
     - bash-it
     - calibre
     - caffeine
@@ -121,8 +122,6 @@
   - name: Install apt packages
     apt: name={{ item }}
     with_items:
-      - awesome
-      - awesome-extra
       - bash-completion
       - dhcpcd5
       - gnome-disk-utility
@@ -136,19 +135,3 @@
       - wpasupplicant
       - xbacklight
       - zeal
-
-  - name: Setup Awesome in XSession
-    template: src=templates/Xsession.j2 dest=/home/{{ user }}/.Xsession
-    become_user: '{{ user }}'
-  - name: Create Awesome config dir
-    file: path=/home/{{ user }}/.config/awesome state=directory mode=0755 owner={{ user }} group={{ user }}
-  - name: Setup Awesome
-    template: src=templates/awesome.lua.j2 dest=/home/{{ user }}/.config/awesome/rc.lua
-    become_user: '{{ user }}'
-
-  - name: Setup Util scripts
-    template: src=templates/{{ item }}.j2 dest=/home/{{ user }}/bin/{{ item }} mode=0755
-    become_user: '{{ user }}'
-    with_items:
-     - wifi
-     - volume
