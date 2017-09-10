@@ -12,6 +12,7 @@
     - conda
     - docker
     - dropbox
+    - firefox
     - gimp
     - go
     - google-chrome
@@ -117,7 +118,6 @@
     apt: name={{ item }}
     when: ansible_distribution != 'Debian'
     with_items:
-      - firefox
       - unetbootin
 
   - name: Install apt packages
