@@ -1,0 +1,13 @@
+---
+# tasks file for caffeine
+
+  - name: Install Caffeine Plus
+    apt:
+      name: caffeine-plus
+      state: present
+    when: ansible_distribution != "Debian"
+  - name: Install Caffeine
+    apt:
+      name: caffeine
+      state: present
+    when: ansible_distribution == "Debian"

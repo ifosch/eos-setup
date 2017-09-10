@@ -7,6 +7,7 @@
     - common
     - bash-it
     - calibre
+    - caffeine
     - conda
     - docker
     - dropbox
@@ -102,13 +103,6 @@
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
     when: ansible_distribution == 'Debian' and thinkpad
-
-  - name: Install Caffeine Plus
-    apt: name=caffeine-plus state=present
-    when: ansible_distribution != 'Debian'
-  - name: Install Caffeine
-    apt: name=caffeine state=present
-    when: ansible_distribution == 'Debian'
 
   - name: Install pip packages
     pip: name={{ item }}
