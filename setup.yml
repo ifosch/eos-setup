@@ -20,6 +20,7 @@
     - libre-office
     - nvm
     - packer
+    - pidgin
     - powerline-font
     - remmina
     - rvm
@@ -128,10 +129,6 @@
       - htop
       - ipcalc
       - keepassx
-      - pidgin
-      - pidgin-guifications
-      - pidgin-hotkeys
-      - pidgin-themes
       - python-argcomplete
       - pwgen
       - terminator
