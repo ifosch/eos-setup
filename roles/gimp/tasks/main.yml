@@ -2,7 +2,8 @@
 # tasks file for gimp
 
   - name: Install apt packages
-    apt: name={{ item }}
+    apt:
+      name: "{{ item }}"
     with_items:
       - gimp
       - gimp-data-extras

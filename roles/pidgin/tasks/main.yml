@@ -2,7 +2,8 @@
 # tasks file for pidgin
 
   - name: Install apt packages
-    apt: name={{ item }}
+    apt:
+      name: "{{ item }}"
     with_items:
       - pidgin
       - pidgin-guifications
