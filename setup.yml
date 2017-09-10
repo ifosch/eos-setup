@@ -33,6 +33,7 @@
     - thefuck
     - vagrant
     - virtualbox
+    - zeal
   tasks:
 
   - name: Add apt repositories keys (Common)
@@ -55,7 +56,6 @@
     register: new_non_deb_apt_repos_added
     with_items:
       - 'ppa:nilarimogard/webupd8'
-      - 'ppa:zeal-developers/ppa'
 
   - name: Update apt caches
     apt: update_cache=yes cache_valid_time=86400
@@ -134,4 +134,3 @@
       - vlc
       - wpasupplicant
       - xbacklight
-      - zeal
