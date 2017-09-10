@@ -17,6 +17,7 @@
     - google-chrome
     - heroku-cli
     - hub
+    - keepassx
     - keybase
     - libre-office
     - nvm
@@ -127,7 +128,6 @@
       - gnome-disk-utility
       - htop
       - ipcalc
-      - keepassx
       - python-argcomplete
       - pwgen
       - terminator
