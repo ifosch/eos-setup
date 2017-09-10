@@ -32,6 +32,7 @@
     - spotify
     - telegram
     - thefuck
+    - unetbootin
     - vagrant
     - virtualbox
     - zeal
@@ -113,12 +114,6 @@
     pip: name={{ item }}
     with_items:
       - psutil
-
-  - name: Install apt packages
-    apt: name={{ item }}
-    when: ansible_distribution != 'Debian'
-    with_items:
-      - unetbootin
 
   - name: Install apt packages
     apt: name={{ item }}
