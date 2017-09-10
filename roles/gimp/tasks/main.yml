@@ -1,0 +1,16 @@
+---
+# tasks file for gimp
+
+  - name: Install apt packages
+    apt: name={{ item }}
+    with_items:
+      - gimp
+      - gimp-data-extras
+      - gimp-dcraw
+      - gimp-gap
+      - gimp-gluas
+      - gimp-gmic
+      - gimp-gutenprint
+      - gimp-lensfun
+      - gimp-plugin-registry
+      - gimp-texturize

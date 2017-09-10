@@ -11,6 +11,7 @@
     - conda
     - docker
     - dropbox
+    - gimp
     - go
     - google-chrome
     - heroku-cli
@@ -123,16 +124,6 @@
       - awesome-extra
       - bash-completion
       - dhcpcd5
-      - gimp
-      - gimp-data-extras
-      - gimp-dcraw
-      - gimp-gap
-      - gimp-gluas
-      - gimp-gmic
-      - gimp-gutenprint
-      - gimp-lensfun
-      - gimp-plugin-registry
-      - gimp-texturize
       - gnome-disk-utility
       - htop
       - ipcalc
