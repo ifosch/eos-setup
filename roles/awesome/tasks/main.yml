@@ -29,6 +29,19 @@
       mode: 0755
       owner: "{{ user }}"
       group: "{{ user }}"
+  - name: Clone Battery widget
+    git:
+      repo: https://github.com/velovix/awesome.battery-widget
+      dest: /home/{{ user }}/.config/awesome/awesome.battery-widget
+    become_user: "{{ user }}"
+  - name: Setup Battery widget
+    file:
+      src: /home/{{ user }}/.config/awesome/awesome.battery-widget/battery-widget.lua
+      path: /home/{{ user }}/.config/awesome/battery-widget.lua
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
+      state: link
   - name: Setup Awesome
     template:
       src: templates/awesome.lua.j2
