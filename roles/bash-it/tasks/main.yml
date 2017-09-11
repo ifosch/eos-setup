@@ -16,7 +16,9 @@
     template:
       src: templates/bashrc.j2
       dest: /home/{{ user }}/.bashrc
-    become_user: "{{ user }}"
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0755
     when: result|failed
   - name: Enable Bash-It aliases
     shell: bash -lc "bash-it enable alias {{ item }}"

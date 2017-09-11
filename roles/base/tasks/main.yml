@@ -2,32 +2,44 @@
 # tasks file for base
 
   - name: Add apt repositories keys (Common)
-    apt_key: keyserver={{ item.server }} id={{ item.id }}
+    apt_key:
+      keyserver: "{{ item.server }}"
+      id: "{{ item.id }}"
+      state: present
     with_items:
-      - { server: 'keys.gnupg.net', id: '6BF18B15' }
-      - { server: 'keyserver.ubuntu.com', id: '8231B6DD' }
-      - { server: 'pgp.mit.edu', id: '5044912E' }
+      - { server: keys.gnupg.net, id: 6BF18B15 }
+      - { server: keyserver.ubuntu.com, id: 8231B6DD }
+      - { server: pgp.mit.edu, id: 5044912E }
 
   - name: Add apt repositories (Debian)
-    apt_repository: repo='{{ item }}'
-    when: ansible_distribution == 'Debian'
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - 'deb http://http.debian.net/debian stretch main contrib non-free'
+      - deb http://http.debian.net/debian stretch main contrib non-free
 
   - name: Add apt repositories (non-Debian)
-    apt_repository: repo='{{ item }}'
-    when: ansible_distribution != 'Debian'
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution != "Debian"
     register: new_non_deb_apt_repos_added
     with_items:
-      - 'ppa:nilarimogard/webupd8'
+      - ppa:nilarimogard/webupd8
 
   - name: Update apt caches
-    apt: update_cache=yes cache_valid_time=86400
+    apt:
+      update_cache: yes
+      cache_valid_time: 86400
     register: apt_cache_updated
 
   - name: Update apt caches (Forced)
-    apt: update_cache=yes
+    apt:
+      update_cache: yes
     when:
       - new_apt_repos_added|changed or new_non_deb_apt_repos_added|changed
       - not apt_cache_updated|changed
@@ -37,49 +49,84 @@
     register: lspci
 
   - name: Set as MacBook Air 11
-    set_fact: mba11=yes
-    when: lspci.stdout.find('BCM43224') > 0
+    set_fact:
+      mba11: yes
+    when:
+      - lspci.stdout.find("BCM43224") > 0
 
   - name: Detect USB devices
     shell: lsusb
     register: lsusb
-    ignore_errors: True
+    ignore_errors: yes
 
   - name: Set as Lenovo Thinkpad T430s
-    set_fact: thinkpad=yes
-    when: lsusb.stdout.find('thinkpad') > 0
+    set_fact:
+      thinkpad: yes
+    when:
+      - lsusb.stdout.find("thinkpad") > 0
 
   - name: Install BCM43224 firmware (Debian and BCM43224)
-    apt: name=firmware-brcm80211
-    when: ansible_distribution == 'Debian' and mba11
+    apt:
+      name: firmware-brcm80211
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+      - mba11
 
   - name: Install iwlwifi firmware (Debian and Lenovo)
-    apt: name=firmware-iwlwifi
-    when: ansible_distribution == 'Debian' and thinkpad
+    apt:
+      name: firmware-iwlwifi
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+      - thinkpad
 
   - name: Install tpb (Lenovo Thinkpad)
-    apt: name=tpb state=present
-    when: ansible_distribution == 'Debian' and thinkpad
+    apt:
+      name: tpb
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+      - thinkpad
 
   - name: Enable Screen brightness control (Lenovo Thinkpad)
-    lineinfile: dest=/etc/default/grub line='GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor"'
+    lineinfile:
+      dest: /etc/default/grub
+      line: GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor"
+      state: present
     register: grub_update
-    when: ansible_distribution == 'Debian' and thinkpad
+    when:
+      - ansible_distribution == "Debian"
+      - thinkpad
   - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
     shell: update-grub
-    become: True
-    when: ansible_distribution == 'Debian' and thinkpad and not grub_update|failed
+    become: yes
+    when:
+      - ansible_distribution == "Debian"
+      - thinkpad
+      - not grub_update|failed
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
-    template: src=templates/20-intel.conf.j2 dest=/usr/share/X11/xorg.conf.d/20-intel.conf
-    when: ansible_distribution == 'Debian' and thinkpad
+    template:
+      src: templates/20-intel.conf.j2
+      dest: /usr/share/X11/xorg.conf.d/20-intel.conf
+      owner: root
+      group: root
+      mode: 0644
+    when:
+      - ansible_distribution == "Debian"
+      - thinkpad
 
   - name: Install pip packages
-    pip: name={{ item }}
+    pip:
+      name: "{{ item }}"
+      state: present
     with_items:
       - psutil
 
   - name: Install apt packages
-    apt: name={{ item }}
+    apt:
+      name: "{{ item }}"
+      state: present
     with_items:
       - bash-completion
       - dhcpcd5

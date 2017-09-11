@@ -4,10 +4,12 @@
   - name: Add apt repositories (non-Debian)
     apt_repository:
       repo: "{{ item }}"
-    when: ansible_distribution != "Debian"
+      state: present
+    when:
+      - ansible_distribution != "Debian"
     register: new_non_deb_apt_repos_added
     with_items:
-      - 'ppa:zeal-developers/ppa'
+      - ppa:zeal-developers/ppa
 
   - name: Update apt caches (Forced)
     apt:
@@ -18,5 +20,6 @@
   - name: Install apt packages
     apt:
       name: "{{ item }}"
+      state: present
     with_items:
       - zeal

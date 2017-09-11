@@ -3,7 +3,7 @@
 
   - name: Check NVM is installed
     shell: '[ -d /home/{{ user }}/.nvm ] && bash -lc nvm'
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     register: nvm_installed
     ignore_errors: yes
   - name: Install NVM
@@ -11,8 +11,9 @@
       repo: https://github.com/creationix/nvm.git
       dest: /home/{{ user }}/.nvm
       version: v0.33.2
-    become_user: '{{ user }}'
-    when: nvm_installed|failed
+    become_user: "{{ user }}"
+    when:
+      - nvm_installed|failed
   - name: Setup NVM
     lineinfile:
       dest: /home/{{ user }}/.bashrc
@@ -20,5 +21,7 @@
               export NVM_DIR="${HOME}/.nvm"
               [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
               [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"
-    become_user: '{{ user }}'
-    when: nvm_installed|failed
+      state: present
+    become_user: "{{ user }}"
+    when:
+      - nvm_installed|failed

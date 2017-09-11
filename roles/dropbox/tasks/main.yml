@@ -3,40 +3,59 @@
 
   - name: Check Dropbox is installed
     shell: ls /home/{{ user }}/.dropbox
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     register: dropbox_installed
-    ignore_errors: True
+    ignore_errors: yes
 
   - name: Install Dropbox (Ubuntu)
     apt:
       name: nautilus-dropbox
-    when: dropbox_installed|failed and ansible_distribution == 'Ubuntu'
+      state: present
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Ubuntu"
   - name: Setup Dropbox (Ubuntu)
     shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
-    become_user: '{{ user }}'
-    when: dropbox_installed|failed and ansible_distribution == 'Ubuntu'
+    become_user: "{{ user }}"
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Ubuntu"
   - name: Rename Dropbox client (Ubuntu)
     shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
-    when: dropbox_installed|failed and ansible_distribution == 'Ubuntu'
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Ubuntu"
   - name: Put Dropbox client wrapper (Ubuntu)
     template:
       src: templates/dropbox.j2
       dest: /usr/bin/dropbox
+      owner: root
+      group: root
       mode: 0755
-    when: dropbox_installed|failed and ansible_distribution == 'Ubuntu'
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Ubuntu"
 
   - name: Download Dropbox (Debian)
     get_url:
       url: https://www.dropbox.com/download?plat=lnx.x86_64
       dest: /tmp/dropbox.tar.gz
-    when: dropbox_installed|failed and ansible_distribution == 'Debian'
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Debian"
   - name: Unarchive Dropbox (Debian)
     unarchive:
       src: /tmp/dropbox.tar.gz
       dest: /home/{{ user }}
-    become_user: '{{ user }}'
-    when: dropbox_installed|failed and ansible_distribution == 'Debian'
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0755
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Debian"
   - name: Setup Dropbox (Debian)
     shell: nohup /home/{{ user }}/.dropbox-dist/dropboxd &
-    become_user: '{{ user }}'
-    when: dropbox_installed|failed and ansible_distribution == 'Debian'
+    become_user: "{{ user }}"
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Debian"

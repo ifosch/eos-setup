@@ -4,18 +4,27 @@
   - name: Install apt packages
     apt:
       name: "{{ item }}"
+      state: present
     with_items:
       - awesome
       - awesome-extra
-
+  - name: Setup Awesome in XSession
+    file:
+      path: /home/{{ user }}/bin
+      state: directory
+      mode: 0755
+      owner: "{{ user }}"
+      group: "{{ user }}"
   - name: Setup Awesome in XSession
     template:
       src: templates/Xsession.j2
-      dest: "/home/{{ user }}/.Xsession"
-    become_user: "{{ user }}"
+      dest: /home/{{ user }}/.Xsession
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
   - name: Create Awesome config dir
     file:
-      path: "/home/{{ user }}/.config/awesome"
+      path: /home/{{ user }}/.config/awesome
       state: directory
       mode: 0755
       owner: "{{ user }}"
@@ -23,15 +32,17 @@
   - name: Setup Awesome
     template:
       src: templates/awesome.lua.j2
-      dest: "/home/{{ user }}/.config/awesome/rc.lua"
-    become_user: "{{ user }}"
-
+      dest: /home/{{ user }}/.config/awesome/rc.lua
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0644
   - name: Setup Util scripts
     template:
-      src: "templates/{{ item }}.j"
-      dest: "/home/{{ user }}/bin/{{ item }}"
+      src: templates/{{ item }}.j2
+      dest: /home/{{ user }}/bin/{{ item }}
+      owner: "{{ user }}"
+      group: "{{ user }}"
       mode: 0755
-    become_user: "{{ user }}"
     with_items:
      - wifi
      - volume

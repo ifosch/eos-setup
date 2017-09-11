@@ -5,6 +5,7 @@
     mba11: no
   roles:
     - common
+    - base
     - awesome
     - bash-it
     - calibre
@@ -18,7 +19,7 @@
     - google-chrome
     - heroku-cli
     - hub
-    - keepassx
+    - keepass
     - keybase
     - libre-office
     - nvm

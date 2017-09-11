@@ -3,24 +3,31 @@
 
   - name: Add Jurisic apt repository keys (for Remmina)
     apt_key:
-      url: "http://apt.jurisic.org/Release.key"
-    when: ansible_distribution == 'Debian'
+      url: http://apt.jurisic.org/Release.key
+      state: present
+    when:
+      - ansible_distribution == "Debian"
   - name: Add apt repositories (Debian)
     apt_repository:
       repo: "{{ item }}"
+      state: present
     register: new_apt_repos_added
-    when: ansible_distribution == 'Debian'
+    when:
+      - ansible_distribution == "Debian"
     with_items:
-      - "deb http://apt.jurisic.org/debian/ stretch main contrib non-free"
+      - deb http://apt.jurisic.org/debian/ stretch main contrib non-free
+
   - name: Add apt repositories (non-Debian)
     apt_repository:
-      repo: '{{ item }}'
-    when: ansible_distribution != 'Debian'
+      repo: "{{ item }}"
+      state: present
+    when: ansible_distribution != "Debian"
     register: new_non_deb_apt_repos_added
     with_items:
-      - 'ppa:remmina-ppa-team/remmina-next'
+      - ppa:remmina-ppa-team/remmina-next
   - name: Update apt caches (Forced)
-    apt: update_cache=yes
+    apt:
+      update_cache: yes
     when:
       - new_apt_repos_added|changed or new_non_deb_apt_repos_added|changed
 

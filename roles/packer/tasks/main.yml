@@ -11,18 +11,25 @@
       dest: /tmp/packer.zip
     register: packer_download
     ignore_errors: yes
-    when: packer_installed|failed
+    when:
+      - packer_installed|failed
   - name: Get Packer ZIP
     shell: curl https://releases.hashicorp.com/packer/1.0.4/packer_1.0.4_linux_amd64.zip > /tmp/packer.zip
-    when: packer_download|failed
+    when:
+      - packer_download|failed
   - name: Install Packer
     unarchive:
       src: /tmp/packer.zip
       dest: /usr/local/bin
       creates: /usr/local/bin/packer
-    when: packer_installed|failed
+      owner: root
+      group: root
+      mode: 0755
+    when:
+      - packer_installed|failed
   - name: Remove Packer ZIP
     file:
       path: /tmp/packer.zip
       state: absent
-    when: packer_installed|failed
+    when:
+      - packer_installed|failed

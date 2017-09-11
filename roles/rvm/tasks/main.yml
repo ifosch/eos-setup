@@ -3,31 +3,40 @@
 
   - name: Check RVM is installed
     shell: bash -lc "rvm"
-    become_user: '{{ user }}'
+    become_user: "{{ user }}"
     register: rvm_installed
     ignore_errors: yes
   - name: Setup RVM keyserver
     shell: gpg --keyserver hkp://pgp.mit.edu --recv-keys D39DC0E3
-    when: rvm_installed|failed
+    when:
+      - rvm_installed|failed
   - name: Download RVM installer
     get_url:
       url: https://get.rvm.io
       dest: /tmp/rvm.sh
-    when: rvm_installed|failed
+    when:
+      - rvm_installed|failed
   - name: Install cURL
     apt:
       name: curl
-    when: ansible_distribution == 'Debian'
+      state: present
+    when:
+      - ansible_distribution == "Debian"
   - name: Install RVM
     shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
-    when: rvm_installed|failed
+    when:
+      - rvm_installed|failed
   - name: Setup RVM in session
     lineinfile:
       dest: /home/{{ user }}/.bashrc
-      line: '. /etc/profile.d/rvm.sh'
-    when: rvm_installed|failed
+      line: . /etc/profile.d/rvm.sh
+      state: present
+    when:
+      - rvm_installed|failed
   - name: Setup PATH for RVM
     lineinfile:
       dest: /home/{{ user }}/.bashrc
-      line: 'export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH'
-    when: rvm_installed|failed
+      line: export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH
+      state: present
+    when:
+      - rvm_installed|failed

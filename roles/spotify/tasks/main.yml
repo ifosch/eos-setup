@@ -5,24 +5,29 @@
     apt_key:
       keyserver: "{{ item.server }}"
       id: "{{ item.id }}"
+      state: present
     with_items:
-      - { server: 'keyserver.ubuntu.com', id: 'D2C19886' }
+      - { server: keyserver.ubuntu.com, id: D2C19886 }
 
   - name: Add apt repositories (Debian)
     apt_repository:
       repo: "{{ item }}"
-    when: ansible_distribution == "Debian"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - 'deb http://repository.spotify.com stable non-free'
+      - deb http://repository.spotify.com stable non-free
 
   - name: Add apt repositories (non-Debian)
     apt_repository:
       repo: "{{ item }}"
-    when: ansible_distribution != "Debian"
+      state: present
+    when:
+      - ansible_distribution != "Debian"
     register: new_non_deb_apt_repos_added
     with_items:
-      - 'deb http://repository.spotify.com stable non-free'
+      - deb http://repository.spotify.com stable non-free
 
   - name: Update apt caches (Forced)
     apt:
@@ -36,11 +41,13 @@
     ignore_errors: yes
   - name: Install LibSSL1.0 from Jessie
     apt:
-      deb: "http://ftp.es.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb"
+      deb: http://ftp.es.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb
+      state: present
     when: libssl_installed|failed
 
   - name: Install apt packages
     apt:
       name: "{{ item }}"
+      state: present
     with_items:
       - spotify-client

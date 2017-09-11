@@ -2,7 +2,9 @@
 # tasks file for libre-office
 
   - name: Install LibreOffice
-    apt: name={{ item }}
+    apt:
+      name: "{{ item }}"
+      state: present
     with_items:
       - fonts-opensymbol
       - hyphen-ca

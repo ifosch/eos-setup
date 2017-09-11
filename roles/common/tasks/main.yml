@@ -4,19 +4,25 @@
   - name: Add apt repositories (Debian)
     apt_repository:
       repo: "{{ item }}"
-    when: ansible_distribution == "Debian"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - "deb http://http.debian.net/debian stretch main contrib non-free"
+      - deb http://http.debian.net/debian stretch main contrib non-free
 
   - name: Update apt caches (Forced)
-    apt: update_cache=yes
+    apt:
+      update_cache: yes
     when:
       - new_apt_repos_added|changed
 
   - name: Install requirements for APT (Debian)
-    apt: name={{ item }} state=present
-    when: ansible_distribution == "Debian"
+    apt:
+      name: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
     with_items:
      - apt-transport-https
      - software-properties-common
