@@ -1,0 +1,11 @@
+---
+# tasks file for aws-cli
+
+  - name: Install pip packages
+    pip:
+      name: "{{ item }}"
+      state: present
+      extra_args: --upgrade --user
+    become_user: "{{ user }}"
+    with_items:
+      - awscli
