@@ -1,0 +1,12 @@
+---
+# tasks file for openvpn
+
+  - name: Install openvpn
+    apt:
+      name: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+    with_items:
+     - openvpn
+     - network-manager-openvpn-gnome
