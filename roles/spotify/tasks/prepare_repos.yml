@@ -1,0 +1,30 @@
+---
+# tasks file for spotify
+
+  - name: Add apt repositories keys (Common)
+    apt_key:
+      keyserver: "{{ item.server }}"
+      id: "{{ item.id }}"
+      state: present
+    with_items:
+      - { server: keyserver.ubuntu.com, id: D2C19886 }
+
+  - name: Add apt repositories (Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+    register: new_apt_repos_added
+    with_items:
+      - deb http://repository.spotify.com stable non-free
+
+  - name: Add apt repositories (non-Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution != "Debian"
+    register: new_non_deb_apt_repos_added
+    with_items:
+      - deb http://repository.spotify.com stable non-free

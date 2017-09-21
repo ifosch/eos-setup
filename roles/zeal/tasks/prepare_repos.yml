@@ -1,0 +1,12 @@
+---
+# tasks file for zeal
+
+  - name: Add apt repositories (non-Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution != "Debian"
+    register: new_non_deb_apt_repos_added
+    with_items:
+      - ppa:zeal-developers/ppa

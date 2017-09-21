@@ -1,48 +1,11 @@
 ---
 # tasks file for base
 
-  - name: Add apt repositories keys (Common)
-    apt_key:
-      keyserver: "{{ item.server }}"
-      id: "{{ item.id }}"
-      state: present
-    with_items:
-      - { server: keys.gnupg.net, id: 6BF18B15 }
-      - { server: keyserver.ubuntu.com, id: 8231B6DD }
-      - { server: pgp.mit.edu, id: 5044912E }
-
-  - name: Add apt repositories (Debian)
-    apt_repository:
-      repo: "{{ item }}"
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-    register: new_apt_repos_added
-    with_items:
-      - deb http://http.debian.net/debian stretch main contrib non-free
-
-  - name: Add apt repositories (non-Debian)
-    apt_repository:
-      repo: "{{ item }}"
-      state: present
-    when:
-      - ansible_distribution != "Debian"
-    register: new_non_deb_apt_repos_added
-    with_items:
-      - ppa:nilarimogard/webupd8
-
-  - name: Update apt caches
-    apt:
-      update_cache: yes
-      cache_valid_time: 86400
-    register: apt_cache_updated
-
-  - name: Update apt caches (Forced)
-    apt:
-      update_cache: yes
-    when:
-      - new_apt_repos_added|changed or new_non_deb_apt_repos_added|changed
-      - not apt_cache_updated|changed
+#  - name: Update apt caches
+#    apt:
+#      update_cache: yes
+#      cache_valid_time: 86400
+#    register: apt_cache_updated
 
   - name: Detect PCI devices
     shell: lspci
@@ -105,6 +68,7 @@
       - ansible_distribution == "Debian"
       - thinkpad
       - not grub_update|failed
+      - grub_update|changed
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template:
       src: templates/20-intel.conf.j2

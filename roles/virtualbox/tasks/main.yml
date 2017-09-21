@@ -1,27 +1,6 @@
 ---
 # tasks file for virtualbox
 
-  - name: Add VirtualBox apt repository keys
-    apt_key:
-      url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
-      state: present
-
-  - name: Add apt repositories (Debian)
-    apt_repository:
-      repo: "{{ item }}"
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-    register: new_apt_repos_added
-    with_items:
-      - deb http://download.virtualbox.org/virtualbox/debian stretch contrib
-
-  - name: Update apt caches (Forced)
-    apt:
-      update_cache: yes
-    when:
-      - new_apt_repos_added|changed
-
   - name: Install apt packages
     apt:
       name: "{{ item }}"

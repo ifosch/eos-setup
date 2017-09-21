@@ -1,0 +1,12 @@
+---
+# tasks file for common
+
+  - name: Add apt repositories (Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+    register: new_apt_repos_added
+    with_items:
+      - deb http://http.debian.net/debian stretch main contrib non-free

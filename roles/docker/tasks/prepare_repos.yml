@@ -1,0 +1,25 @@
+---
+# tasks file for docker
+
+  - name: Add Docker apt repository keys
+    apt_key:
+      url: https://download.docker.com/linux/debian/gpg
+      id: 0EBFCD88
+      state: present
+    register: docker_keys
+    ignore_errors: yes
+  - name: Get Docker apt repository keys
+    shell: curl https://download.docker.com/linux/debian/gpg | apt-key add -
+    become: yes
+    when:
+      - docker_keys|failed
+
+  - name: Add apt repositories (Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+    register: new_apt_repos_added
+    with_items:
+      - deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
