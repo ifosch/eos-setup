@@ -59,3 +59,10 @@
     when:
       - dropbox_installed|failed
       - ansible_distribution == "Debian"
+  - name: Remove Dropbox package
+    file:
+      path: /tmp/dropbox.tar.gz
+      state: absent
+    when:
+      - dropbox_installed|failed
+      - ansible_distribution == "Debian"
