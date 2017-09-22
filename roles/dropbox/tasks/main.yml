@@ -7,35 +7,6 @@
     register: dropbox_installed
     ignore_errors: yes
 
-  - name: Install Dropbox (Ubuntu)
-    apt:
-      name: nautilus-dropbox
-      state: present
-    when:
-      - dropbox_installed|failed
-      - ansible_distribution == "Ubuntu"
-  - name: Setup Dropbox (Ubuntu)
-    shell: dropbox stop && XDG_CURRENT_DESKTOP=Unity dropbox start -i
-    become_user: "{{ user }}"
-    when:
-      - dropbox_installed|failed
-      - ansible_distribution == "Ubuntu"
-  - name: Rename Dropbox client (Ubuntu)
-    shell: mv /usr/bin/dropbox /usr/bin/dropbox.py
-    when:
-      - dropbox_installed|failed
-      - ansible_distribution == "Ubuntu"
-  - name: Put Dropbox client wrapper (Ubuntu)
-    template:
-      src: templates/dropbox.j2
-      dest: /usr/bin/dropbox
-      owner: root
-      group: root
-      mode: 0755
-    when:
-      - dropbox_installed|failed
-      - ansible_distribution == "Ubuntu"
-
   - name: Download Dropbox (Debian)
     get_url:
       url: https://www.dropbox.com/download?plat=lnx.x86_64
