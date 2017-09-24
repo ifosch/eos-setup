@@ -12,6 +12,13 @@
       dest: /tmp/telegram.tar.xz
     when:
       - telegram_installed|failed
+  - name: Ensure ~/.local/share exists
+    file:
+      path: /home/{{ user }}/.local/share
+      state: directory
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      mode: 0755
   - name: Unpack Telegram
     shell: tar -xJf /tmp/telegram.tar.xz
     args:
