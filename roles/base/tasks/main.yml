@@ -88,6 +88,7 @@
     with_items:
       - bash-completion
       - dhcpcd5
+      - dnsutils
       - gnome-disk-utility
       - htop
       - ipcalc
@@ -96,5 +97,6 @@
       - sox
       - terminator
       - vlc
+      - whois
       - wpasupplicant
       - xbacklight
