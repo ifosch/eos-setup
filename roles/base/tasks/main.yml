@@ -93,6 +93,7 @@
       - ipcalc
       - python-argcomplete
       - pwgen
+      - sox
       - terminator
       - vlc
       - wpasupplicant
