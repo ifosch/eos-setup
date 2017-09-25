@@ -92,6 +92,7 @@
       - gnome-disk-utility
       - htop
       - ipcalc
+      - libsox-fmt-mp3
       - python-argcomplete
       - pwgen
       - sox
