@@ -7,7 +7,7 @@ The only option I found it was a MacBook Air, so I bought it.
 I was decided to install Linux, even while for that time, it was not very easy, but I was adviced to try out MacOS.
 It was nice enough, simple, and, even most important to me, supposed very light work and effort, just adopting some tools and get used to the new keyboard and hardware.
 Anyway, deep inside, a part of me was willing to go back to Linux, a little bit.
-That's why when I found easier to install Linux in a MacBook, I decided to prepare an automated setup for my local environment.
+That's why when I found feasible to install Linux in a MacBook, I decided to prepare an automated setup for my local environment.
 
 With this playbook I setup the following in my setup:
 
@@ -68,6 +68,12 @@ With this playbook I setup the following in my setup:
           echo localhost ansible_connection=local >> /etc/ansible/hosts
         '
         exit
+        
+## Your setup
+
+In order to adjust this for your setup, you can remove or add any software, by removing or adding the role name in the `setup.yml`.
+
+If you are interested in writing new roles, you must remember to include a `prepare_repos.yml` task file in the role, or the `common` role will fail.
 
 ## To make it work:
 
