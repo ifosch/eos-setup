@@ -1,0 +1,16 @@
+---
+# tasks file for rvm
+
+  - name: Single-user install RVM
+    shell: bash /tmp/rvm.sh master --ruby=1.9.3-p551 --ruby=2.2.1 --ruby=2.1.5 --ruby=2.0.0
+    become_user: "{{ user }}"
+  - name: Setup RVM in session
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: . ${HOME}/.rvm/scripts/rvm
+      state: present
+  - name: Setup PATH for RVM
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: export PATH=${HOME}/.rvm/gems/ruby-1.9.3-p551/bin:$PATH
+      state: present

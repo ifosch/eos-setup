@@ -23,20 +23,6 @@
     when:
       - ansible_distribution == "Debian"
   - name: Install RVM
-    shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5
-    when:
-      - rvm_installed|failed
-  - name: Setup RVM in session
-    lineinfile:
-      dest: /home/{{ user }}/.bashrc
-      line: . /etc/profile.d/rvm.sh
-      state: present
-    when:
-      - rvm_installed|failed
-  - name: Setup PATH for RVM
-    lineinfile:
-      dest: /home/{{ user }}/.bashrc
-      line: export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH
-      state: present
+    include_tasks: "roles/rvm/tasks/{{ rvm_install_mode }}_install.yml"
     when:
       - rvm_installed|failed

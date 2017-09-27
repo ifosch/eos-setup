@@ -1,0 +1,15 @@
+---
+# tasks file for rvm
+
+  - name: Multi-user install RVM
+    shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5 --ruby=2.0.0
+  - name: Setup RVM in session
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: . /etc/profile.d/rvm.sh
+      state: present
+  - name: Setup PATH for RVM
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH
+      state: present

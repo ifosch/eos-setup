@@ -1,2 +1,4 @@
 ---
 # vars file for rvm
+
+rvm_install_mode: "single_user"
