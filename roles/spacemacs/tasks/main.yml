@@ -27,7 +27,7 @@
       state: present
     with_items:
       - ditaa
-      - emacs
+      - emacs25
       - pandoc
 
   - name: Check Spacemacs installed
