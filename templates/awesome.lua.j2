@@ -6,6 +6,8 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
+-- Revelation (Expose-like) library
+local revelation = require("revelation")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
@@ -45,6 +47,9 @@ end
 -- [[[ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
+
+-- Revelation init
+revelation.init()
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
@@ -248,6 +253,7 @@ globalkeys = awful.util.table.join(
               {description = "view next", group = "tag"}),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
+    awful.key({ modkey,           }, "e",      revelation),
 
     awful.key({ modkey,           }, "j",
         function ()

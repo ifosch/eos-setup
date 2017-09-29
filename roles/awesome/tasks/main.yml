@@ -42,6 +42,11 @@
       group: "{{ user }}"
       mode: 0644
       state: link
+  - name: Clone Revelation
+    git:
+      repo: https://github.com/guotsuan/awesome-revelation
+      dest: /home/{{ user }}/.config/awesome/revelation
+    become_user: "{{ user }}"
   - name: Setup Awesome
     template:
       src: templates/awesome.lua.j2
