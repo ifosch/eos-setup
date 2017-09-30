@@ -1,4 +1,5 @@
 .vagrant/**
+config/**
 .*.swp
 *.retry
 nohup.out
