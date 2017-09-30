@@ -253,7 +253,8 @@ globalkeys = awful.util.table.join(
               {description = "view next", group = "tag"}),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
-    awful.key({ modkey,           }, "e",      revelation),
+    awful.key({ modkey,           }, "e",      revelation,
+              {description = "show all clients (Revelation/Exposé)", group = "client"}),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -295,7 +296,7 @@ globalkeys = awful.util.table.join(
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+    awful.key({ modkey, "Control"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
@@ -348,28 +349,28 @@ globalkeys = awful.util.table.join(
               function ()
                   awful.util.spawn("xbacklight -inc 10")
               end,
-              {description = "Increase brightness"}),
+              {description = "Increase brightness", group = "screen"}),
     awful.key({ }, "XF86MonBrightnessDown",
               function ()
                   awful.util.spawn("xbacklight -dec 10")
               end,
-              {description = "Decrease brightness"}),
+              {description = "Decrease brightness", group = "screen"}),
     -- Volume
     awful.key({ }, "#122",
               function ()
                   awful.util.spawn("volume -10", false)
               end,
-              {description = "Decrease Volume"}),
+              {description = "Decrease Volume", group = "multimedia"}),
     awful.key({ }, "#123",
               function ()
                   awful.util.spawn("volume +10", false)
               end,
-              {description = "Increase Volume"}),
+              {description = "Increase Volume", group = "multimedia"}),
     awful.key({ }, "#121",
               function ()
                   awful.util.spawn("volume mute", false)
               end,
-              {description = "Mute/Unmute Speakers/Headphones"})
+              {description = "Mute/Unmute Speakers/Headphones", group = "multimedia"})
 )
 
 clientkeys = awful.util.table.join(
