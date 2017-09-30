@@ -50,6 +50,7 @@
     git:
       repo: http://github.com/syl20bnr/spacemacs
       dest: /home/{{ user }}/.emacs.d
+      version: develop
     become_user: "{{ user }}"
     when:
       - spacemacs_installed|failed
