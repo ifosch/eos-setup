@@ -2,14 +2,27 @@
 # tasks file for rvm
 
   - name: Multi-user install RVM
-    shell: bash /tmp/rvm.sh master --ruby=1.9.3 --ruby=2.2.1 --ruby=2.1.5 --ruby=2.0.0
+    shell: bash /tmp/rvm.sh master
   - name: Setup RVM in session
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: . /etc/profile.d/rvm.sh
       state: present
+  - name: Install RVM openssl
+    shell: bash -l rvm pkg install openssl
+    when: rvm_openssl_setup
+  - name: Set openssl ruby install opts
+    set_fact:
+      rubies_opts: "--with-openssl-dir=/usr/local/rvm/usr"
+    when: rvm_openssl_setup
+  - name: Install rubies
+    shell: bash -l rvm install {{ item }} {{ rubies_opts }}
+    with_items:
+      - "{{ rubies }}"
   - name: Setup PATH for RVM
     lineinfile:
       dest: /home/{{ user }}/.bashrc
-      line: export PATH=/usr/local/rvm/gems/ruby-1.9.3-p551/bin:$PATH
+      line: export PATH=/usr/local/rvm/gems/ruby-{{ rubies.0 }}/bin:$PATH
       state: present
+    when:
+      - rubies.0

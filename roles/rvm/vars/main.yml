@@ -2,3 +2,10 @@
 # vars file for rvm
 
 rvm_install_mode: "single_user"
+rubies:
+    - 1.9.3-p551
+    - 2.2.1
+    - 2.1.5
+    - 2.0.0
+rubies_opts: ""
+rvm_openssl_setup: "{{ ansible_distribution == 'Debian' and ansible_lsb.release == 'testing' }}"

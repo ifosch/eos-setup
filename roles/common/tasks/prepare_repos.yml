@@ -1,6 +1,12 @@
 ---
 # tasks file for common
 
+  - name: Set release name for Debian Testing
+    set_fact:
+      ansible_distribution_release: "{{ ansible_lsb.release }}"
+    when:
+      - ansible_distribution == "Debian"
+      - ansible_distribution_release == "NA"
   - name: Add apt repositories (Debian)
     apt_repository:
       repo: "{{ item }}"
@@ -9,4 +15,4 @@
       - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - deb http://http.debian.net/debian stretch main contrib non-free
+      - "deb http://http.debian.net/debian {{ ansible_distribution_release }} main contrib non-free"

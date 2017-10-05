@@ -9,6 +9,7 @@ This requires the variable `user` to be setup.
 ## Role Variables
 
 - `rvm_install_mode`: Defines which install mode for RVM is chosen. Defaults to `single_user`. Another choice might be `multi_user`.
+- `rubies`: Defines a list of all rubies to be installed.
 
 ## Dependencies
 
