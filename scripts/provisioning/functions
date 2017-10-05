@@ -1,0 +1,48 @@
+clear_persistent_rules() {
+    sudo rm -rf /etc/udev/rules.d/70-persistent-net.rules &&
+        sudo ln -s /dev/null /etc/udev/rules.d/70-persistent-net.rules
+}
+
+log() {
+    if [ "${1}" != "0" ]; then
+        cat "${2}"
+        exit 1
+    fi
+}
+
+upgrade() {
+      test -f /tmp/updated || \
+          sudo apt-get update && \
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
+          touch /tmp/updated &> /tmp/upgrade.log
+      log $? /tmp/upgrade.log
+}
+
+install_deps() {
+      git version &> /dev/null || \
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -y install \
+          git-core \
+          python-pip \
+          libcurl4-openssl-dev \
+          python-dev &> /tmp/install_deps.log
+      log $? /tmp/install_deps.log
+}
+
+setup_ansible() {
+      ansible --version &> /dev/null || \
+          sudo pip install \
+          ansible \
+          pycurl \
+          pyYAML \
+          argcomplete &> /tmp/setup_ansible.log
+      log $? /tmp/setup_ansible.log
+      sudo mkdir -p /etc/ansible &> /dev/null
+      sudo bash -c '
+        echo localhost ansible_connection=local > /etc/ansible/hosts
+      '
+}
+
+run_ansible() {
+      cd /vagrant
+      time sudo ansible-playbook setup.yml --extra-vars "user=vagrant"
+}
