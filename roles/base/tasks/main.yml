@@ -11,16 +11,16 @@
     when:
       - lspci.stdout.find("BCM43224") > 0
 
-  - name: Detect USB devices
-    shell: lsusb
-    register: lsusb
+  - name: Detect platform
+    shell: dmidecode -t system
+    register: dmidecode
     ignore_errors: yes
 
   - name: Set as Lenovo Thinkpad T430s
     set_fact:
       thinkpad: yes
     when:
-      - lsusb.stdout.find("thinkpad") > 0
+      - dmidecode.stdout.find("hinkpad") > 0
 
   - name: Install BCM43224 firmware (Debian and BCM43224)
     apt:
