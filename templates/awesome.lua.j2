@@ -346,13 +346,13 @@ globalkeys = awful.util.table.join(
               {description = "show the menubar", group = "launcher"}),
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp",
-              function ()
-                  awful.util.spawn("xbacklight -inc 10")
+      function ()
+        awful.spawn.with_shell("brightness inc")
               end,
               {description = "Increase brightness", group = "screen"}),
     awful.key({ }, "XF86MonBrightnessDown",
               function ()
-                  awful.util.spawn("xbacklight -dec 10")
+                  awful.spawn.with_shell("brightness dec")
               end,
               {description = "Decrease brightness", group = "screen"}),
     -- Volume
