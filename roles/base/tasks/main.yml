@@ -1,78 +1,11 @@
 ---
 # tasks file for base
 
-  - name: Detect PCI devices
-    shell: lspci
-    register: lspci
-
-  - name: Set as MacBook Air 11
+  - name: Calculate hardware profile for computer model
     set_fact:
-      mba11: yes
-    when:
-      - lspci.stdout.find("BCM43224") > 0
+      hw_hook: "{{ computer_model|lower|regex_replace(' ', '_')|regex_replace(',','_') }}"
 
-  - name: Detect platform
-    shell: dmidecode -t system
-    register: dmidecode
-    ignore_errors: yes
-
-  - name: Set as Lenovo Thinkpad T430s
-    set_fact:
-      thinkpad: yes
-    when:
-      - dmidecode.stdout.find("hinkpad") > 0
-
-  - name: Install BCM43224 firmware (Debian and BCM43224)
-    apt:
-      name: firmware-brcm80211
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-      - mba11
-
-  - name: Install iwlwifi firmware (Debian and Lenovo)
-    apt:
-      name: firmware-iwlwifi
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-      - thinkpad
-
-  - name: Install tpb (Lenovo Thinkpad)
-    apt:
-      name: tpb
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-      - thinkpad
-
-  - name: Enable Screen brightness control (Lenovo Thinkpad)
-    lineinfile:
-      dest: /etc/default/grub
-      line: GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor"
-      state: present
-    register: grub_update
-    when:
-      - ansible_distribution == "Debian"
-      - thinkpad
-  - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
-    shell: update-grub
-    become: yes
-    when:
-      - ansible_distribution == "Debian"
-      - thinkpad
-      - not grub_update|failed
-      - grub_update|changed
-  - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
-    template:
-      src: templates/20-intel.conf.j2
-      dest: /usr/share/X11/xorg.conf.d/20-intel.conf
-      owner: root
-      group: root
-      mode: 0644
-    when:
-      - ansible_distribution == "Debian"
-      - thinkpad
+  - include_tasks: "roles/base/tasks/hw_{{ hw_hook }}.yml"
 
   - name: Install pip packages
     pip:

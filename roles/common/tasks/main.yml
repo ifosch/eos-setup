@@ -23,3 +23,27 @@
       update_cache: yes
     when:
       - new_repos_added|changed
+
+  - name: Get DMI system version
+    shell: dmidecode -s system-version
+    register: dmi_system_version
+
+  - name: Get DMI system product name
+    shell: dmidecode -s system-product-name
+    register: dmi_system_product_name
+
+  - name: Get DMI system manufacturer
+    shell: dmidecode -s system-manufacturer
+    register: dmi_system_manufacturer
+
+  - name: Set computer model
+    set_fact:
+      computer_model: "{{ dmi_system_product_name.stdout }}"
+    when:
+      - dmi_system_manufacturer.stdout == "Apple Inc."
+
+  - name: Set computer model from DMI system version
+    set_fact:
+      computer_model: "{{ dmi_system_version.stdout }}"
+    when:
+      - dmi_system_manufacturer.stdout == "LENOVO"

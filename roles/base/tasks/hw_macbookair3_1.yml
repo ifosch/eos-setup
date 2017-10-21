@@ -1,0 +1,9 @@
+---
+# tasks file for base
+
+  - name: Install BCM43224 firmware (Debian and BCM43224)
+    apt:
+      name: firmware-brcm80211
+      state: present
+    when:
+      - ansible_distribution == "Debian"

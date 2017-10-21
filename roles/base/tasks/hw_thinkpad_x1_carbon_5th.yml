@@ -1,0 +1,41 @@
+---
+# tasks file for base
+
+  - name: Install iwlwifi firmware (Debian and Lenovo)
+    apt:
+      name: firmware-iwlwifi
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+
+  - name: Install tpb (Lenovo Thinkpad)
+    apt:
+      name: tpb
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+
+  - name: Enable Screen brightness control (Lenovo Thinkpad)
+    lineinfile:
+      dest: /etc/default/grub
+      line: GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} acpi_osi=Linux acpi_backlight=vendor psmouse.proto=imps"
+      state: present
+    register: grub_update
+    when:
+      - ansible_distribution == "Debian"
+  - name: Update GRUB for Screen brightness control (Lenovo Thinkpad)
+    shell: update-grub
+    become: yes
+    when:
+      - ansible_distribution == "Debian"
+      - not grub_update|failed
+      - grub_update|changed
+  - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
+    template:
+      src: templates/20-intel.conf.j2
+      dest: /usr/share/X11/xorg.conf.d/20-intel.conf
+      owner: root
+      group: root
+      mode: 0644
+    when:
+      - ansible_distribution == "Debian"
