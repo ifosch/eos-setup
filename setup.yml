@@ -28,6 +28,7 @@
     - packer
     - pidgin
     - powerline-font
+    - postgresql-client
     - remmina
     - rvm
     - slack
