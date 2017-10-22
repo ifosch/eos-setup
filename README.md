@@ -58,7 +58,7 @@ With this playbook I setup the following in my setup:
 
         sudo apt-get update && sudo apt-get -y upgrade
         sudo apt-get -y install git-core python-pip \
-          libcurl4-openssl-dev python-dev
+          libcurl4-openssl-dev python-dev libssl-dev
         sudo pip install ansible pycurl pyYAML argcomplete
         mkdir -p src/github.com/ifosch/eos-setup
         git clone https://github.com/ifosch/eos-setup.git \
