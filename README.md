@@ -47,18 +47,19 @@ With this playbook I setup the following in my setup:
 ## Requirements:
 
   - Fresh Debian Stretch or EOS Freya setup
-  - When using Debian Stretch, `sudo` needs to be installed and setup.
+  - When using Debian, `sudo` needs to be installed and setup.
     Use these commands, and log out and in back:
 
         su -
         apt-get install sudo gksu
         adduser <your_username> sudo
 
+  - When using Debian buster, you should install `libssl-dev` too.
   - Run:
 
         sudo apt-get update && sudo apt-get -y upgrade
         sudo apt-get -y install git-core python-pip \
-          libcurl4-openssl-dev python-dev libssl-dev
+          libcurl4-openssl-dev python-dev
         sudo pip install ansible pycurl pyYAML argcomplete
         mkdir -p src/github.com/ifosch/eos-setup
         git clone https://github.com/ifosch/eos-setup.git \
