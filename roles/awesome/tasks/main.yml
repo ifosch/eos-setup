@@ -15,7 +15,7 @@
       mode: 0755
       owner: "{{ user }}"
       group: "{{ user }}"
-  - name: Setup Awesome in XSession
+  - name: Setup Awesome in Xsession
     template:
       src: templates/Xsession.j2
       dest: /home/{{ user }}/.Xsession
@@ -64,3 +64,4 @@
     with_items:
      - wifi
      - volume
+     - brightness
