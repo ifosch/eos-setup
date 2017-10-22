@@ -54,7 +54,7 @@ With this playbook I setup the following in my setup:
         apt-get install sudo gksu
         adduser <your_username> sudo
 
-  - When using Debian buster, you should install `libssl-dev` too.
+  - When using Debian Buster, you should install `libssl-dev` too.
   - Run:
 
         sudo apt-get update && sudo apt-get -y upgrade
@@ -80,3 +80,5 @@ If you are interested in writing new roles, you must remember to include a `prep
 
     cd src/github.com/ifosch/eos-setup
     sudo ansible-playbook setup.yml --extra-vars "user=${USER}"
+
+When using Debian Buster, reboot after this finished.
