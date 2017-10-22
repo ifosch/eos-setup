@@ -36,6 +36,10 @@
     shell: dmidecode -s system-manufacturer
     register: dmi_system_manufacturer
 
+  - name: Set default computer model
+    set_fact:
+      computer_model: "default"
+
   - name: Set computer model
     set_fact:
       computer_model: "{{ dmi_system_product_name.stdout }}"
