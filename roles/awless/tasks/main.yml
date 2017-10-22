@@ -1,0 +1,22 @@
+---
+# tasks file for awless
+
+  - name: Check awless is installed
+    shell: ls /home/{{ user }}/bin/awless
+    become_user: "{{ user }}"
+    register: awless_installed
+    ignore_errors: yes
+  - name: Install awless
+    shell: GOPATH=/home/{{ user }} /usr/local/go/bin/go get github.com/wallix/awless
+    args:
+      creates: /home/{{ user }}/bin/awless
+    become_user: "{{ user }}"
+    when:
+      - awless_installed|failed
+  - name: Setup awless
+    lineinfile:
+      dest: /home/{{ user }}/.bashrc
+      line: export PATH=$PATH:/home/{{ user }}/bin
+      state: present
+    when:
+      - awless_installed|failed
