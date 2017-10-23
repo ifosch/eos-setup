@@ -14,7 +14,6 @@ show() {
 
 mute() {
   amixer set Master toggle
-  echo "muted" >> /home/ifosch/prova.log
 }
 
 change() {
@@ -23,7 +22,6 @@ change() {
 
   new_volume=$((${new_percent} * ${max} / 100))
   amixer cset ${device_id} ${new_volume} &> /dev/null
-  echo "changed to $(show)" >> /home/ifosch/prova.log
 }
 
 cmd=${1-show}
@@ -50,5 +48,3 @@ case $cmd in
   usage
 ;;
 esac
-
-echo "end" >> /home/ifosch/prova.log
