@@ -6,6 +6,7 @@
   roles:
     - common
     - base
+    - acrobat-reader
     - awesome
     - awless
     - aws-cli
