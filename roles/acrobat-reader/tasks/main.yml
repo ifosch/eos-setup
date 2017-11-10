@@ -1,0 +1,20 @@
+---
+# tasks file for acrobat-reader
+
+  - name: Get dpkg architectures
+    shell: dpkg --print-architecture && dpkg --print-foreign-architectures
+    register: dpkg_architectures
+    when: ansible_distribution == "Debian"
+  - name: Add i386 architecture in dpkg
+    command: dpkg --add-architecture i386
+    when:
+      - ansible_distribution == "Debian"
+      - '"i386" not in dpkg_architectures.stdout'
+
+  - name: Install apt packages
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - acroread:i386
+    when: ansible_distribution == "Debian"

@@ -1,0 +1,17 @@
+---
+# tasks file for acrobat-reader
+
+  - name: Add apt repositories keys (Debian)
+    apt_key:
+      keyserver: pgp.mit.edu
+      id: 65558117
+      state: present
+  - name: Add apt repositories (Debian)
+    apt_repository:
+      repo: "{{ item }}"
+      state: present
+    when:
+      - ansible_distribution == "Debian"
+    register: new_apt_repos_added
+    with_items:
+      - deb http://www.deb-multimedia.org buster main non-free
