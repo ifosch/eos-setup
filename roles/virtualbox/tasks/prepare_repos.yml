@@ -3,7 +3,7 @@
 
   - name: Add VirtualBox apt repository keys
     apt_key:
-      url: https://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc
+      url: https://download.virtualbox.org/virtualbox/debian/oracle_vbox_2016.asc
       state: present
 
   - name: Add apt repositories (Debian)
