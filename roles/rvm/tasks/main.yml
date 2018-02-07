@@ -7,7 +7,7 @@
     register: rvm_installed
     ignore_errors: yes
   - name: Setup RVM keyserver
-    shell: gpg --keyserver hkp://pgp.mit.edu --recv-keys D39DC0E3
+    shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
     when:
       - rvm_installed|failed
   - name: Download RVM installer

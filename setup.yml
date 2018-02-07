@@ -6,9 +6,7 @@
   roles:
     - common
     - base
-    - acrobat-reader
     - awesome
-    - awless
     - aws-cli
     - bash-it
     - calibre
@@ -19,6 +17,7 @@
     - firefox
     - gimp
     - go
+    - awless
     - google-chrome
     - heroku-cli
     - hub
