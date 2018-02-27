@@ -21,6 +21,7 @@
     - google-chrome
     - heroku-cli
     - hub
+    - jq
     - keepass
     - keybase
     - libre-office

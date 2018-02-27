@@ -1,0 +1,15 @@
+---
+# tasks file for jq
+
+  - name: Check jq is installed
+    shell: ls /usr/bin/jq
+    become_user: "{{ user }}"
+    register: jq_installed
+    ignore_errors: yes
+  - name: Download jq
+    get_url:
+      url: https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+      dest: /usr/bin/jq
+      mode: 0755
+    when:
+      - jq_installed|failed
