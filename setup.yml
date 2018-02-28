@@ -25,6 +25,7 @@
     - jq
     - keepass
     - keybase
+    - libav-tools
     - libre-office
     - nvm
     - openvpn
