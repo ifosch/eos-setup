@@ -8,6 +8,7 @@
     - base
     - awesome
     - aws-cli
+    - aws-eb-cli
     - bash-it
     - calibre
     - caffeine
