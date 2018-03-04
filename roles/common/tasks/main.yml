@@ -10,6 +10,7 @@
     with_items:
       - apt-transport-https
       - software-properties-common
+      - python-pexpect
 
   - include_tasks: "roles/{{ role }}/tasks/prepare_repos.yml"
     with_items:
