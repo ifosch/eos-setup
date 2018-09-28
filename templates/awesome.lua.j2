@@ -344,6 +344,12 @@ globalkeys = awful.util.table.join(
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
+    -- Lock
+    awful.key({ }, "#179",
+      function ()
+      	awful.spawn("/usr/bin/xscreensaver-command -lock", false)
+      end,
+      {description = "lock screen", group = "screen"}),
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp",
       function ()
@@ -585,3 +591,16 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- ]]]
+do
+  local cmds =
+  {
+    "nm-applet",
+    "run_keybase",
+    "caffeine-indicator"
+  }
+
+  for _, i in pairs(cmds) do
+    awful.util.spawn(i)
+  end
+end
+
