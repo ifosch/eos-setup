@@ -46,8 +46,8 @@ With this playbook I setup the following in my setup:
 
 ## Requirements:
 
-  - Fresh Debian Stretch or EOS Freya setup
-  - When using Debian, `sudo` needs to be installed and setup.
+  - Fresh Debian Stretch or newer, or EOS Freya setup
+  - When using Debian Buster, or previous, `sudo` needs to be installed and setup.
     Use these commands, and log out and in back:
 
         su -
@@ -59,9 +59,9 @@ With this playbook I setup the following in my setup:
   - Run:
 
         sudo apt-get update && sudo apt-get -y upgrade
-        sudo apt-get -y install git-core python-pip \
+        sudo apt-get -y install git-core python3-pip \
           libcurl4-openssl-dev python-dev libssl-dev
-        sudo pip install ansible pycurl pyYAML argcomplete
+        sudo pip3 install ansible pycurl pyYAML argcomplete
         mkdir -p src/github.com/ifosch/eos-setup
         git clone https://github.com/ifosch/eos-setup.git \
           src/github.com/ifosch/eos-setup
