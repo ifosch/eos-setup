@@ -67,7 +67,7 @@ With this playbook I setup the following in my setup:
           src/github.com/ifosch/eos-setup
         sudo mkdir -p /etc/ansible
         sudo bash -c '
-          echo localhost ansible_connection=local >> /etc/ansible/hosts
+          echo localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3 >> /etc/ansible/hosts
         '
         exit
         
