@@ -14,4 +14,4 @@
       - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - deb http://download.virtualbox.org/virtualbox/debian stretch contrib
+      - deb http://download.virtualbox.org/virtualbox/debian buster contrib

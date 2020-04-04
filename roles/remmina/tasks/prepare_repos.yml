@@ -1,22 +1,6 @@
 ---
 # tasks file for remmina
 
-  - name: Add Jurisic apt repository keys (for Remmina)
-    apt_key:
-      url: http://apt.jurisic.org/Release.key
-      state: present
-    when:
-      - ansible_distribution == "Debian"
-  - name: Add apt repositories (Debian)
-    apt_repository:
-      repo: "{{ item }}"
-      state: present
-    register: new_apt_repos_added
-    when:
-      - ansible_distribution == "Debian"
-    with_items:
-      - deb http://apt.jurisic.org/debian/ stretch main contrib non-free
-
   - name: Add apt repositories (non-Debian)
     apt_repository:
       repo: "{{ item }}"

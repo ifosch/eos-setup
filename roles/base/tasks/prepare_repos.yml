@@ -19,7 +19,7 @@
       - ansible_distribution == "Debian"
     register: new_apt_repos_added
     with_items:
-      - deb http://http.debian.net/debian stretch main contrib non-free
+      - deb http://http.debian.net/debian testing main contrib non-free
 
   - name: Add apt repositories (non-Debian)
     apt_repository:
