@@ -7,7 +7,7 @@
       id: "{{ item.id }}"
       state: present
     with_items:
-      - { server: keyserver.ubuntu.com, id: 341D9410 }
+      - { server: keyserver.ubuntu.com, id: 4773BD5E130D1D45 }
 
   - name: Add apt repositories (Debian)
     apt_repository:
