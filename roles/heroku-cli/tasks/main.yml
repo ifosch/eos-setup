@@ -13,11 +13,11 @@
     register: heroku_download
     ignore_errors: yes
     when:
-      - heroku_installed|failed
+      - heroku_installed is failed
   - name: Get Heroku Installer
     shell: curl https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz > /tmp/heroku.tar.gz
     when:
-      - heroku_download|failed
+      - heroku_download is failed
   - name: Unarchive Heroku Installer
     unarchive:
       src: /tmp/heroku.tar.gz
@@ -25,8 +25,8 @@
       owner: root
       group: root
       mode: 0755
-    when: heroku_installed|failed
+    when: heroku_installed is failed
   - name: Install Heroku
     shell: /usr/local/lib/heroku/install
     when:
-      - heroku_installed|failed
+      - heroku_installed is failed

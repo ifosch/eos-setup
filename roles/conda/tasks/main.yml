@@ -11,22 +11,22 @@
       url: https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
       dest: /tmp/Miniconda.sh
     when:
-      - miniconda_installed|failed
+      - miniconda_installed is failed
   - name: Install Miniconda
     shell: bash -lc "bash /tmp/Miniconda.sh -b -p /home/{{ user }}/.miniconda"
     become_user: "{{ user }}"
     when:
-      - miniconda_installed|failed
+      - miniconda_installed is failed
   - name: Setup Conda
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: export PATH=$PATH:/home/{{ user }}/.miniconda/bin
       state: present
     when:
-      - miniconda_installed|failed
+      - miniconda_installed is failed
   - name: Remove Miniconda installer
     file:
       path: /tmp/Miniconda.sh
       state: absent
     when:
-      - miniconda_installed|failed
+      - miniconda_installed is failed

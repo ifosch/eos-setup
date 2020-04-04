@@ -11,31 +11,31 @@
       url: https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
       dest: /tmp/go.tgz
     when:
-      - go_installed|failed
+      - go_installed is failed
   - name: Unpack Go
     shell: tar -xzf /tmp/go.tgz
     args:
       chdir: /usr/local
       creates: /usr/local/go
     when:
-      - go_installed|failed
+      - go_installed is failed
   - name: Install Go
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: export PATH=$PATH:/usr/local/go/bin
       state: present
     when:
-      - go_installed|failed
+      - go_installed is failed
   - name: Setup Go
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: export GOPATH=$HOME
       state: present
     when:
-      - go_installed|failed
+      - go_installed is failed
   - name: Remove Go package
     file:
       path: /tmp/go.tgz
       state: absent
     when:
-      - go_installed|failed
+      - go_installed is failed

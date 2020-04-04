@@ -11,7 +11,7 @@
       url: https://tdesktop.com/linux
       dest: /tmp/telegram.tar.xz
     when:
-      - telegram_installed|failed
+      - telegram_installed is failed
   - name: Ensure ~/.local/share exists
     file:
       path: /home/{{ user }}/.local/share
@@ -25,18 +25,18 @@
       chdir: /home/{{ user }}/.local/share
       creates: /home/{{ user }}/.local/share/Telegram
     when:
-      - telegram_installed|failed
+      - telegram_installed is failed
     become_user: "{{ user }}"
   - name: Install Telegram
     shell: ln -s /home/{{ user }}/.local/share/Telegram/Telegram /home/{{ user }}/bin/telegram
     args:
       creates: /home/{{ user }}/bin/telegram
     when:
-      - telegram_installed|failed
+      - telegram_installed is failed
     become_user: "{{ user }}"
   - name: Remove Telegram package
     file:
       path: /tmp/telegram.tar.xz
       state: absent
     when:
-      - telegram_installed|failed
+      - telegram_installed is failed

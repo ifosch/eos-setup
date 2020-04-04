@@ -22,8 +22,7 @@
   - name: Update apt caches (Forced)
     apt:
       update_cache: yes
-    when:
-      - new_repos_added|changed
+    when: new_repos_added is changed
 
   - name: Get DMI system version
     shell: dmidecode -s system-version

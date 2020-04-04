@@ -13,7 +13,7 @@
       version: v0.33.2
     become_user: "{{ user }}"
     when:
-      - nvm_installed|failed
+      - nvm_installed is failed
   - name: Setup NVM
     lineinfile:
       dest: /home/{{ user }}/.bashrc
@@ -24,4 +24,4 @@
       state: present
     become_user: "{{ user }}"
     when:
-      - nvm_installed|failed
+      - nvm_installed is failed

@@ -9,13 +9,13 @@
   - name: Setup RVM keyserver
     shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
     when:
-      - rvm_installed|failed
+      - rvm_installed is failed
   - name: Download RVM installer
     get_url:
       url: https://get.rvm.io
       dest: /tmp/rvm.sh
     when:
-      - rvm_installed|failed
+      - rvm_installed is failed
   - name: Install cURL
     apt:
       name: curl
@@ -25,4 +25,4 @@
   - name: Install RVM
     include_tasks: "roles/rvm/tasks/{{ rvm_install_mode }}_install.yml"
     when:
-      - rvm_installed|failed
+      - rvm_installed is failed

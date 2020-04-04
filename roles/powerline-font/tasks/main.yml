@@ -21,14 +21,14 @@
       mode: 0755
     become_user: "{{ user }}"
     when:
-      - font_installed|failed
+      - font_installed is failed
   - name: Download Powerline font
     get_url:
       url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
       dest: /home/{{ user }}/.fonts
     become_user: "{{ user }}"
     when:
-      - font_installed|failed
+      - font_installed is failed
   - name: Make fontconfig dir
     file:
       path: /home/{{ user }}/.config/fontconfig/conf.d
@@ -38,16 +38,16 @@
       mode: 0755
     become_user: "{{ user }}"
     when:
-      - font_installed|failed
+      - font_installed is failed
   - name: Download Powerline fontconfig file
     get_url:
       url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
       dest: /home/{{ user }}/.config/fontconfig/conf.d
     become_user: "{{ user }}"
     when:
-      - font_installed|failed
+      - font_installed is failed
   - name: Update font cache
     shell: fc-cache -vf /home/{{ user }}/.fonts
     become_user: "{{ user }}"
     when:
-      - font_installed|failed
+      - font_installed is failed

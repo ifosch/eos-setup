@@ -28,8 +28,8 @@
     become: yes
     when:
       - ansible_distribution == "Debian"
-      - not grub_update|failed
-      - grub_update|changed
+      - not grub_update is failed
+      - grub_update is changed
   - name: Setup X11 Screen brightness controls (Lenovo Thinkpad)
     template:
       src: templates/20-intel.conf.j2

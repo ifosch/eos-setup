@@ -12,20 +12,20 @@
     register: vagrant_download
     ignore_errors: yes
     when:
-      - vagrant_installed|failed
+      - vagrant_installed is failed
   - name: Get Vagrant deb package
     shell: curl https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb > /tmp/vagrant.deb
     when:
-      - vagrant_download|failed
+      - vagrant_download is failed
   - name: Install Vagrant
     apt:
       deb: /tmp/vagrant.deb
       state: present
     when:
-      - vagrant_installed|failed
+      - vagrant_installed is failed
   - name: Remove Vagrant deb package
     file:
       path: /tmp/vagrant.deb
       state: absent
     when:
-      - vagrant_installed|failed
+      - vagrant_installed is failed

@@ -10,27 +10,27 @@
     apt:
       name: linux-source
       state: present
-    when: result|failed
+    when: result is failed
   - name: Clone DisplayLink installer into tmp
     git:
       repo: http://github.com/AdnanHodzic/displaylink-debian.git
       dest: /tmp/displaylink-debian
     become_user: "{{ user }}"
-    when: result|failed
+    when: result is failed
   - name: Install DisplayLink
     expect:
       command: /tmp/displaylink-debian/displaylink-debian.sh --install
       responses:
         (?i)and accept here: "Yes"
     become: yes
-    when: result|failed
+    when: result is failed
   - name: Stop DLM service
     service: name=dlm state=stopped
-    when: result|failed
+    when: result is failed
   - name: remove EVDI module
     shell: /sbin/modprobe -r evdi
     become: yes
-    when: result|failed
+    when: result is failed
   - name: Start DLM service
     service: name=dlm state=started
-    when: result|failed
+    when: result is failed

@@ -12,7 +12,7 @@
     shell: curl https://download.docker.com/linux/debian/gpg | apt-key add -
     become: yes
     when:
-      - docker_keys|failed
+      - docker_keys is failed
 
   - name: Add apt repositories (Debian)
     apt_repository:

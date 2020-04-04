@@ -12,20 +12,20 @@
     register: keybase_download
     ignore_errors: yes
     when:
-      - keybase_installed|failed
+      - keybase_installed is failed
   - name: Get Keybase deb package
     shell: curl https://prerelease.keybase.io/keybase_amd64.deb > /tmp/keybase.deb
     when:
-      - keybase_download|failed
+      - keybase_download is failed
   - name: Install Keybase
     apt:
       deb: /tmp/keybase.deb
       state: present
     when:
-      - keybase_installed|failed
+      - keybase_installed is failed
   - name: Remove Keybase deb package
     file:
       path: /tmp/keybase.deb
       state: absent
     when:
-      - keybase_installed|failed
+      - keybase_installed is failed

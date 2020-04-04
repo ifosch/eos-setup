@@ -10,7 +10,7 @@
     register: libgnutls_version
     ignore_errors: yes
     when:
-      - emacs_installed|failed
+      - emacs_installed is failed
   - name: Ensure libgnutls30 version
     apt:
       name: libgnutls30=3.5*
@@ -18,8 +18,8 @@
       dpkg_options: force-downgrade
       state: present
     when:
-      - emacs_installed|failed
-      - libgnutls_version|failed
+      - emacs_installed is failed
+      - libgnutls_version is failed
 
   - name: Install apt packages
     apt:
@@ -39,13 +39,13 @@
       path: /home/{{ user }}/.emacs
       state: absent
     when:
-      - spacemacs_installed|failed
+      - spacemacs_installed is failed
   - name: Remove Emacs config dir
     file:
       path: /home/{{ user }}/.emacs.d
       state: absent
     when:
-      - spacemacs_installed|failed
+      - spacemacs_installed is failed
   - name: Clone Spacemacs
     git:
       repo: http://github.com/syl20bnr/spacemacs
@@ -53,7 +53,7 @@
       version: develop
     become_user: "{{ user }}"
     when:
-      - spacemacs_installed|failed
+      - spacemacs_installed is failed
   - name: Install Source Code Pro font
     git:
       repo: https://github.com/adobe-fonts/source-code-pro
@@ -63,9 +63,9 @@
     become_user: "{{ user }}"
     register: source_code_pro_installed
     when:
-      - spacemacs_installed|failed
+      - spacemacs_installed is failed
   - name: Update font cache
     shell: fc-cache -vf /home/{{ user }}/.fonts/adobe-source-code-pro
     become_user: "{{ user }}"
     when:
-      - not source_code_pro_installed|failed
+      - not source_code_pro_installed is failed

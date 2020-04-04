@@ -12,18 +12,18 @@
       creates: /home/{{ user }}/bin/hub
     become_user: "{{ user }}"
     when:
-      - hub_installed|failed
+      - hub_installed is failed
   - name: Setup Hub
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: export PATH=$PATH:/home/{{ user }}/bin
       state: present
     when:
-      - hub_installed|failed
+      - hub_installed is failed
   - name: Replace Git with Hub
     lineinfile:
       dest: /home/{{ user }}/.bashrc
       line: alias git=hub
       state: present
     when:
-      - hub_installed|failed
+      - hub_installed is failed

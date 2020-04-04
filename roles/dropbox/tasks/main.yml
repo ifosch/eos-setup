@@ -12,7 +12,7 @@
       url: https://www.dropbox.com/download?plat=lnx.x86_64
       dest: /tmp/dropbox.tar.gz
     when:
-      - dropbox_installed|failed
+      - dropbox_installed is failed
       - ansible_distribution == "Debian"
   - name: Unarchive Dropbox (Debian)
     unarchive:
@@ -22,18 +22,18 @@
       group: "{{ user }}"
       mode: 0755
     when:
-      - dropbox_installed|failed
+      - dropbox_installed is failed
       - ansible_distribution == "Debian"
   - name: Setup Dropbox (Debian)
     shell: nohup /home/{{ user }}/.dropbox-dist/dropboxd &
     become_user: "{{ user }}"
     when:
-      - dropbox_installed|failed
+      - dropbox_installed is failed
       - ansible_distribution == "Debian"
   - name: Remove Dropbox package
     file:
       path: /tmp/dropbox.tar.gz
       state: absent
     when:
-      - dropbox_installed|failed
+      - dropbox_installed is failed
       - ansible_distribution == "Debian"

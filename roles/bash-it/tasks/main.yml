@@ -11,7 +11,7 @@
       repo: http://github.com/Bash-it/bash-it.git
       dest: /home/{{ user }}/.bash_it
     become_user: "{{ user }}"
-    when: result|failed
+    when: result is failed
   - name: Setup Bash-It
     template:
       src: templates/bashrc.j2
@@ -19,11 +19,11 @@
       owner: "{{ user }}"
       group: "{{ user }}"
       mode: 0755
-    when: result|failed
+    when: result is failed
   - name: Enable Bash-It aliases
     shell: bash -lc "bash-it enable alias {{ item }}"
     become_user: "{{ user }}"
-    when: result|failed
+    when: result is failed
     with_items:
       - ansible
       - bundler
@@ -39,7 +39,7 @@
   - name: Enable Bash-It completions
     shell: bash -lc "bash-it enable completion {{ item }}"
     become_user: "{{ user }}"
-    when: result|failed
+    when: result is failed
     with_items:
       - bash-it
       - conda
@@ -58,7 +58,7 @@
   - name: Enable Bash-It plugins
     shell: bash -lc "bash-it enable plugin {{ item }}"
     become_user: "{{ user }}"
-    when: result|failed
+    when: result is failed
     with_items:
       - alias-completion
       - aws

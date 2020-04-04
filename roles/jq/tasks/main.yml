@@ -12,4 +12,4 @@
       dest: /usr/bin/jq
       mode: 0755
     when:
-      - jq_installed|failed
+      - jq_installed is failed
