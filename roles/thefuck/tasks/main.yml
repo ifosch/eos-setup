@@ -7,7 +7,6 @@
       state: present
   - name: Install pip packages
     pip:
-      name: "{{ item }}"
+      name:
+        - thefuck
       state: present
-    with_items:
-      - thefuck

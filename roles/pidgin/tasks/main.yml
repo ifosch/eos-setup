@@ -3,10 +3,9 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - pidgin
+        - pidgin-guifications
+        - pidgin-hotkeys
+        - pidgin-themes
       state: present
-    with_items:
-      - pidgin
-      - pidgin-guifications
-      - pidgin-hotkeys
-      - pidgin-themes

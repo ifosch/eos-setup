@@ -3,9 +3,8 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - unetbootin
       state: present
     when:
       - ansible_distribution != "Debian"
-    with_items:
-      - unetbootin

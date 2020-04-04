@@ -3,10 +3,9 @@
 
   - name: Install pip packages
     pip:
-      name: "{{ item }}"
+      name:
+        - awscli
+        - docutils
       state: present
       extra_args: --upgrade --user
     become_user: "{{ user }}"
-    with_items:
-      - awscli
-      - docutils

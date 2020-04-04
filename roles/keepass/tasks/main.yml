@@ -3,7 +3,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - keepassx
       state: present
-    with_items:
-      - keepassx

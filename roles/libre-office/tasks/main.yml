@@ -3,14 +3,13 @@
 
   - name: Install LibreOffice
     apt:
-      name: "{{ item }}"
+      name:
+        - fonts-opensymbol
+        - hyphen-ca
+        - hyphen-en-us
+        - libreoffice
+        - myspell-ca
+        - myspell-es
+        - mythes-ca
+        - mythes-en-us
       state: present
-    with_items:
-      - fonts-opensymbol
-      - hyphen-ca
-      - hyphen-en-us
-      - libreoffice
-      - myspell-ca
-      - myspell-es
-      - mythes-ca
-      - mythes-en-us

@@ -3,7 +3,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - vim
       state: present
-    with_items:
-      - vim

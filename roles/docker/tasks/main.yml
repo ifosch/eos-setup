@@ -3,14 +3,12 @@
 
   - name: Install pip packages
     pip:
-      name: "{{ item }}"
+      name:
+        - docker-compose
       state: present
-    with_items:
-      - docker-compose
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - docker-ce
       state: present
-    with_items:
-      - docker-ce

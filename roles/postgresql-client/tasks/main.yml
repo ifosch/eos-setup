@@ -3,7 +3,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - postgresql-client
       state: present
-    with_items:
-      - postgresql-client

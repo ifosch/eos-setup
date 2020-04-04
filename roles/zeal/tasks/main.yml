@@ -3,7 +3,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - zeal
       state: present
-    with_items:
-      - zeal

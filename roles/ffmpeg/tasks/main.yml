@@ -3,8 +3,7 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - ffmpeg
     when:
       - ansible_distribution == "Debian"
-    with_items:
-      - ffmpeg

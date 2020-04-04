@@ -9,28 +9,26 @@
 
   - name: Install pip packages
     pip:
-      name: "{{ item }}"
+      name:
+        - psutil
       state: present
-    with_items:
-      - psutil
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - bash-completion
+        - dhcpcd5
+        - dnsutils
+        - gnome-disk-utility
+        - htop
+        - ipcalc
+        - libsox-fmt-mp3
+        - python-argcomplete
+        - pwgen
+        - sox
+        - terminator
+        - vlc
+        - whois
+        - wpasupplicant
+        - xbacklight
       state: present
-    with_items:
-      - bash-completion
-      - dhcpcd5
-      - dnsutils
-      - gnome-disk-utility
-      - htop
-      - ipcalc
-      - libsox-fmt-mp3
-      - python-argcomplete
-      - pwgen
-      - sox
-      - terminator
-      - vlc
-      - whois
-      - wpasupplicant
-      - xbacklight

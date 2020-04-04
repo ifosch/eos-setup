@@ -13,7 +13,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - spotify-client
       state: present
-    with_items:
-      - spotify-client

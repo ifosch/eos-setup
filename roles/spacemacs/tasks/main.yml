@@ -23,12 +23,11 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - ditaa
+        - emacs25
+        - pandoc
       state: present
-    with_items:
-      - ditaa
-      - emacs25
-      - pandoc
 
   - name: Check Spacemacs installed
     shell: ls /home/{{ user }}/.emacs.d/spacemacs.mk

@@ -3,10 +3,9 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - remmina
+        - remmina-plugin-rdp
+        - remmina-plugin-vnc
     when:
       - ansible_distribution == "Debian"
-    with_items:
-      - remmina
-      - remmina-plugin-rdp
-      - remmina-plugin-vnc

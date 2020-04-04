@@ -3,10 +3,9 @@
 
   - name: Install openvpn
     apt:
-      name: "{{ item }}"
+      name:
+       - openvpn
+       - network-manager-openvpn-gnome
       state: present
     when:
       - ansible_distribution == "Debian"
-    with_items:
-     - openvpn
-     - network-manager-openvpn-gnome

@@ -3,16 +3,15 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - gimp
+        - gimp-data-extras
+        - gimp-dcraw
+        - gimp-gap
+        - gimp-gluas
+        - gimp-gmic
+        - gimp-gutenprint
+        - gimp-lensfun
+        - gimp-plugin-registry
+        - gimp-texturize
       state: present
-    with_items:
-      - gimp
-      - gimp-data-extras
-      - gimp-dcraw
-      - gimp-gap
-      - gimp-gluas
-      - gimp-gmic
-      - gimp-gutenprint
-      - gimp-lensfun
-      - gimp-plugin-registry
-      - gimp-texturize

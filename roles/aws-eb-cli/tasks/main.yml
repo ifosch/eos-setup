@@ -3,9 +3,9 @@
 
   - name: Install pip packages
     pip:
-      name: "{{ item }}"
+      name:
+        - awsebcli
       state: present
       extra_args: --upgrade --user
     become_user: "{{ user }}"
-    with_items:
-      - awsebcli
+

@@ -13,8 +13,7 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - acroread:i386
       state: present
-    with_items:
-      - acroread:i386
     when: ansible_distribution == "Debian"

@@ -3,7 +3,6 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - virtualbox-5.1
       state: present
-    with_items:
-      - virtualbox-5.1

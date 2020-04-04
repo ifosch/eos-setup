@@ -3,8 +3,7 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - redis-tools
     when:
       - ansible_distribution == "Debian"
-    with_items:
-      - redis-tools

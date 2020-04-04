@@ -3,11 +3,10 @@
 
   - name: Install apt packages
     apt:
-      name: "{{ item }}"
+      name:
+        - awesome
+        - awesome-extra
       state: present
-    with_items:
-      - awesome
-      - awesome-extra
   - name: Setup Awesome in XSession
     file:
       path: /home/{{ user }}/bin
