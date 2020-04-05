@@ -35,7 +35,6 @@
     - postgresql-client
     - redis-cli
     - remmina
-    - rvm
     - slack
     - spacemacs
     - spotify
