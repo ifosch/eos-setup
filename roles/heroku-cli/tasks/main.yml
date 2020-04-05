@@ -8,25 +8,16 @@
     ignore_errors: yes
   - name: Download Heroku Toolbelt installer
     get_url:
-      url: https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz
-      dest: /tmp/heroku.tar.gz
+      url: https://cli-assets.heroku.com/install-ubuntu.sh
+      dest: /tmp/heroku-install.sh
+      owner: root
+      group: root
+      mode: 0755
     register: heroku_download
     ignore_errors: yes
     when:
       - heroku_installed is failed
-  - name: Get Heroku Installer
-    shell: curl https://cli-assets.heroku.com/branches/stable/heroku-linux-amd64.tar.gz > /tmp/heroku.tar.gz
-    when:
-      - heroku_download is failed
-  - name: Unarchive Heroku Installer
-    unarchive:
-      src: /tmp/heroku.tar.gz
-      dest: /usr/local/lib
-      owner: root
-      group: root
-      mode: 0755
-    when: heroku_installed is failed
   - name: Install Heroku
-    shell: /usr/local/lib/heroku/install
+    shell: /tmp/heroku-install.sh
     when:
       - heroku_installed is failed
