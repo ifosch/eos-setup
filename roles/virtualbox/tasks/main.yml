@@ -4,5 +4,5 @@
   - name: Install apt packages
     apt:
       name:
-        - virtualbox-5.1
+        - virtualbox-6.1
       state: present
