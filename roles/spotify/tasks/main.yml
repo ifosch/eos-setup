@@ -1,16 +1,6 @@
 ---
 # tasks file for spotify
 
-  - name: Check LibSSL install
-    shell: dpkg -l | grep libssl1.0.0
-    register: libssl_installed
-    ignore_errors: yes
-  - name: Install LibSSL1.0 from Jessie
-    apt:
-      deb: http://ftp.es.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
-      state: present
-    when: libssl_installed is failed
-
   - name: Install apt packages
     apt:
       name:
