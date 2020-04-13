@@ -10,6 +10,7 @@
     - aws-cli
     - aws-eb-cli
     - bash-it
+    - blueman
     - calibre
     - caffeine
     - conda
