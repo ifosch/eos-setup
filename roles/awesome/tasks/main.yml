@@ -7,6 +7,13 @@
         - awesome
         - awesome-extra
       state: present
+  - name: Setup US keyboard in X
+    template:
+      src: templates/keyboard.X.conf
+      dest: /etc/X11/xorg.conf.d/00-keyboard.conf
+      owner: "root"
+      group: "root"
+      mode: 0644
   - name: Setup Awesome in XSession
     file:
       path: /home/{{ user }}/bin
