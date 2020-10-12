@@ -29,3 +29,9 @@
       state: absent
     when:
       - keybase_installed is failed
+  - name: Prevent using keybase default repository from breaking apt upgrades
+    file:
+      path: /etc/default/keybase
+      state: present
+    when:
+      - keybase_installed is failed
