@@ -6,7 +6,7 @@
       name:
         - apt-transport-https
         - software-properties-common
-        - python-pexpect
+        - python3-pexpect
       state: present
     when:
       - ansible_distribution == "Debian"
